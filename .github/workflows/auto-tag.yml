@@ -6,7 +6,6 @@ on:
       - main
     paths-ignore:
       - '.github/**'
-      - 'README.md'
       - '.gitignore'
 
 jobs:
@@ -40,16 +39,33 @@ jobs:
           echo "Previous version: $LATEST_TAG"
           echo "New version: $NEW_VERSION"
       
-      - name: Update addon.xml version
+      - name: Update addon.xml version and news
         run: |
           VERSION="${{ steps.get_tag.outputs.NEW_VERSION }}"
           VERSION_NUMBER="${VERSION#v}"
+          LATEST_TAG="${{ steps.get_tag.outputs.LATEST_TAG }}"
+          CURRENT_DATE=$(date +%Y-%m-%d)
+          
+          # Get commit messages since last tag
+          if [ "$LATEST_TAG" != "v0.0.0" ]; then
+            COMMIT_MESSAGES=$(git log ${LATEST_TAG}..HEAD --pretty=format:"- %s" | grep -v "^- chore: bump version" || echo "- Minor updates and improvements")
+          else
+            COMMIT_MESSAGES="- Initial release"
+          fi
+          
+          # Create news entry
+          NEWS_ENTRY="[B]NextGen RT News ChangeLog $VERSION - $CURRENT_DATE[/B]\n$COMMIT_MESSAGES"
           
           # Update version in addon.xml
           sed -i "s/version=\"[0-9]*\.[0-9]*\.[0-9]*\"/version=\"$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
           
-          # Show the change
+          # Update news section in addon.xml (replace content between <news> tags)
+          # Using perl for better multi-line handling
+          perl -i -0pe "s|<news>.*?</news>|<news>$NEWS_ENTRY\n\t\t</news>|s" plugin.video.nextgenrt/addon.xml
+          
+          # Show the changes
           echo "Updated addon.xml version to $VERSION_NUMBER"
+          echo "Updated news section with latest changes"
       
       - name: Commit version update
         run: |

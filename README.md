@@ -29,7 +29,7 @@ NextGen RT News is a Kodi addon that provides access to RT (Russia Today) News l
 
 ### Method 1: Install from ZIP file
 
-1. Download the latest `plugin.video.nextgenrt-1.0.0.zip` from the releases
+1. Download the latest release zip file from [GitHub Releases](https://github.com/poslogica/plugin.video.nextgenrt/releases/latest)
 2. In Kodi, go to **Settings** → **Add-ons**
 3. Enable **Unknown sources** if not already enabled
 4. Select **Install from zip file**
@@ -58,29 +58,33 @@ NextGen RT News is a Kodi addon that provides access to RT (Russia Today) News l
 - **Language**: Python 3
 - **Video Format**: HLS (m3u8)
 - **Stream Resolution**: Determined by RT's source (typically HD quality)
-- **Dependencies**: 
+- **Dependencies**:
   - xbmc.python (3.0.1+)
   - inputstream.adaptive
 
 ## Troubleshooting
 
 ### Stream won't play
+
 - Ensure **InputStream Adaptive** is installed and enabled
 - Check your internet connection
 - Some streams may be geo-blocked in certain regions
 
 ### Plugin doesn't appear
+
 - Verify the plugin is installed in the correct addons directory
 - Check Kodi logs for errors: `Settings → System → Logging → Enable debug logging`
 
 ### No channels listed
+
 - Restart Kodi
 - Check if the addon is enabled: `Settings → Add-ons → My add-ons → Video add-ons`
 
 ## Development
 
 ### Project Structure
-```
+
+```text
 plugin.video.nextgenrt/
 ├── addon.xml                 # Plugin metadata and dependencies
 ├── default.py               # Entry point
@@ -117,6 +121,7 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 ## Changelog
 
 ### v1.0.0 (2025-10-23)
+
 - Initial release
 - Support for 5 RT News live channels
 - Automatic stream URL extraction

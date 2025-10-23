@@ -24,84 +24,113 @@ RT_STREAMS = [
     ("https://arabic.rt.com/live/", "ARAB")
 ]
 
+def _fetch_page_html(page_url):
+    """Fetch HTML content from a page with proper headers."""
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    req = Request(page_url, headers=headers)
+    response = urlopen(req)
+    return response.read().decode('utf-8')
+
+def _extract_m3u8_url(html):
+    """Extract m3u8 URL from HTML."""
+    m = re.search(r'(https?://[^"\s]+\.m3u8[^"\s]*)', html, re.DOTALL)
+    if m:
+        xbmc.log("NextGen RT News - Found m3u8 URL: %s" % m.group(1), xbmc.LOGINFO)
+        return m.group(1)
+    return None
+
+def _extract_file_pattern(html):
+    """Extract URL from file: pattern."""
+    m = re.search(r"file:\s*['\"]([^'\"]+)['\"]", html, re.DOTALL)
+    if m:
+        xbmc.log("NextGen RT News - Found stream URL (file pattern): %s" % m.group(1), xbmc.LOGINFO)
+        return m.group(1)
+    return None
+
+def _extract_url_pattern(html):
+    """Extract URL from url: pattern with m3u8."""
+    m = re.search(r'url:\s*["\']([^"\']+\.m3u8[^"\']*)["\']', html, re.DOTALL)
+    if m:
+        xbmc.log("NextGen RT News - Found stream URL (url pattern): %s" % m.group(1), xbmc.LOGINFO)
+        return m.group(1)
+    return None
+
+def _extract_source_tag(html):
+    """Extract URL from <source> tag."""
+    m = re.search(r'<source[^>]+src=["\']([^"\']+)["\']', html, re.DOTALL)
+    if m:
+        xbmc.log("NextGen RT News - Found stream URL (source tag): %s" % m.group(1), xbmc.LOGINFO)
+        return m.group(1)
+    return None
+
+def _extract_from_iframe(html):
+    """Extract stream URL from iframe embed."""
+    m = re.search(r'<iframe[^>]+src=["\']([^"\']+)["\']', html, re.DOTALL)
+    if not m:
+        return None
+    
+    iframe_url = m.group(1)
+    
+    # Skip Rumble iframes
+    if 'rumble.com' in iframe_url:
+        xbmc.log("NextGen RT News - Found Rumble iframe but cannot extract stream directly", xbmc.LOGWARNING)
+        return None
+    
+    # Ensure full URL
+    if not iframe_url.startswith('http'):
+        iframe_url = 'https:' + iframe_url
+    
+    xbmc.log("NextGen RT News - Found iframe, fetching: %s" % iframe_url, xbmc.LOGINFO)
+    
+    try:
+        iframe_html = _fetch_page_html(iframe_url)
+        return _extract_m3u8_url(iframe_html)
+    except Exception as e:
+        xbmc.log("NextGen RT News - Error fetching iframe: %s" % str(e), xbmc.LOGWARNING)
+        return None
+
+def _extract_rtd_stream(html):
+    """Extract stream URL from rtd.rt.com specific pattern."""
+    m = re.search(r'streams_hls.+?url:\s*["\']([^"\']+)["\']', html, re.DOTALL)
+    if m:
+        xbmc.log("NextGen RT News - Found stream URL (rtd pattern): %s" % m.group(1), xbmc.LOGINFO)
+        return m.group(1)
+    return None
+
+def _try_standard_patterns(html):
+    """Try standard extraction patterns in order."""
+    extractors = [
+        _extract_m3u8_url,
+        _extract_file_pattern,
+        _extract_url_pattern,
+        _extract_source_tag,
+        _extract_from_iframe
+    ]
+    
+    for extractor in extractors:
+        url = extractor(html)
+        if url:
+            return url
+    return None
+
 def get_stream_url(page_url):
     """Extract the actual stream URL from the RT page."""
     try:
         xbmc.log("NextGen RT News - Fetching page: %s" % page_url, xbmc.LOGINFO)
+        html = _fetch_page_html(page_url)
         
-        # Create request with headers to avoid 403 errors
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-        req = Request(page_url, headers=headers)
-        response = urlopen(req)
-        html = response.read().decode('utf-8')
-        
-        # Try different regex patterns to find the stream URL
-        if 'rtd.rt.com' not in page_url:
-            # Pattern 1: Look for any .m3u8 URL in the page
-            m = re.search(r'(https?://[^"\s]+\.m3u8[^"\s]*)', html, re.DOTALL)
-            if m:
-                xbmc.log("NextGen RT News - Found m3u8 URL: %s" % m.group(1), xbmc.LOGINFO)
-                return m.group(1)
-            
-            # Pattern 2: file: 'url'
-            m = re.search(r"file:\s*['\"]([^'\"]+)['\"]", html, re.DOTALL)
-            if m:
-                xbmc.log("NextGen RT News - Found stream URL (file pattern): %s" % m.group(1), xbmc.LOGINFO)
-                return m.group(1)
-            
-            # Pattern 3: url: "*.m3u8"
-            m = re.search(r'url:\s*["\']([^"\']+\.m3u8[^"\']*)["\']', html, re.DOTALL)
-            if m:
-                xbmc.log("NextGen RT News - Found stream URL (url pattern): %s" % m.group(1), xbmc.LOGINFO)
-                return m.group(1)
-            
-            # Pattern 4: <source src="url"
-            m = re.search(r'<source[^>]+src=["\']([^"\']+)["\']', html, re.DOTALL)
-            if m:
-                xbmc.log("NextGen RT News - Found stream URL (source tag): %s" % m.group(1), xbmc.LOGINFO)
-                return m.group(1)
-            
-            # Pattern 5: Check for Rumble or other video platform embeds
-            # Extract video ID and try to get the actual stream
-            m = re.search(r'rumble\.com/embed/([^/?"\s]+)', html, re.DOTALL)
-            if m:
-                rumble_id = m.group(1)
-                xbmc.log("NextGen RT News - Found Rumble embed, trying to get stream for ID: %s" % rumble_id, xbmc.LOGINFO)
-                # For now, return None and let other patterns try
-                # In future, we could integrate with Rumble plugin
-            
-            # Pattern 6: Check for iframe with embedded player
-            m = re.search(r'<iframe[^>]+src=["\']([^"\']+)["\']', html, re.DOTALL)
-            if m:
-                iframe_url = m.group(1)
-                if 'rumble.com' in iframe_url:
-                    xbmc.log("NextGen RT News - Found Rumble iframe but cannot extract stream directly", xbmc.LOGWARNING)
-                    # Skip Rumble iframes for now
-                else:
-                    if not iframe_url.startswith('http'):
-                        iframe_url = 'https:' + iframe_url
-                    xbmc.log("NextGen RT News - Found iframe, fetching: %s" % iframe_url, xbmc.LOGINFO)
-                    # Fetch the iframe page with headers
-                    iframe_req = Request(iframe_url, headers=headers)
-                    iframe_response = urlopen(iframe_req)
-                    iframe_html = iframe_response.read().decode('utf-8')
-                    # Look for m3u8 in iframe
-                    m2 = re.search(r'(https?://[^"\s]+\.m3u8[^"\s]*)', iframe_html, re.DOTALL)
-                    if m2:
-                        xbmc.log("NextGen RT News - Found m3u8 in iframe: %s" % m2.group(1), xbmc.LOGINFO)
-                        return m2.group(1)
+        # Check if this is rtd.rt.com (uses different pattern)
+        if 'rtd.rt.com' in page_url:
+            stream_url = _extract_rtd_stream(html)
         else:
-            # For rtd.rt.com, look for streams_hls
-            m = re.search(r'streams_hls.+?url:\s*["\']([^"\']+)["\']', html, re.DOTALL)
-            if m:
-                xbmc.log("NextGen RT News - Found stream URL (rtd pattern): %s" % m.group(1), xbmc.LOGINFO)
-                return m.group(1)
+            stream_url = _try_standard_patterns(html)
         
-        # If no stream found, return None
-        xbmc.log("NextGen RT News - No stream URL found in page", xbmc.LOGERROR)
-        return None
+        if not stream_url:
+            xbmc.log("NextGen RT News - No stream URL found in page", xbmc.LOGERROR)
+        
+        return stream_url
     except Exception as e:
         xbmc.log("NextGen RT News - Error getting stream URL: %s" % str(e), xbmc.LOGERROR)
         return None

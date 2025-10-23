@@ -1,0 +1,56 @@
+# Kodi Media Center language file
+# Addon Name: NextGen RT News
+# Addon id: plugin.video.nextgenrt
+# Addon Provider: poslogica
+
+msgctxt "Addon Summary"
+msgid "NextGen RT News"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), and Arabic channels."
+msgstr ""
+
+msgctxt "#32001"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Enable Subtitles"
+msgstr ""
+
+msgctxt "#32003"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#32010"
+msgid "RT News - Global"
+msgstr ""
+
+msgctxt "#32011"
+msgid "RT News - US"
+msgstr ""
+
+msgctxt "#32012"
+msgid "RT News - Documentaries"
+msgstr ""
+
+msgctxt "#32013"
+msgid "RT News - ESP"
+msgstr ""
+
+msgctxt "#32014"
+msgid "RT News - ARAB"
+msgstr ""
+
+msgctxt "#32100"
+msgid "No stream URL found"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Error fetching stream"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Failed to resolve stream URL"
+msgstr ""
