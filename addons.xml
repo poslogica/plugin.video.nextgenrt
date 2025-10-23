@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.10" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.11" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -10,16 +10,17 @@
 		</extension>
 		<extension point="xbmc.addon.metadata">
 			<summary lang="en">NextGen RT News</summary>
-			<description lang="en">NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), and Arabic channels.</description>
+			<description lang="en">NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), and Arabic channels. Automatic updates available via repository.</description>
 			<disclaimer lang="en">Feel free to use this script.</disclaimer>
 			<platform>all</platform>
 			<language>en</language>
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 			<website>https://www.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-			<news>[B]NextGen RT News ChangeLog v1.0.10 - 2025-10-23[/B]
-	- docs: add Kodi repository installation instructions to README
-	- feat: add automated gh-pages repository updates and repository addon
+			<news>[B]NextGen RT News ChangeLog v1.0.11 - 2025-10-23[/B]
+	- Merge branch 'main' of https://github.com/poslogica/plugin.video.nextgenrt
+	- docs: mention automatic updates in addon description
+	- fix: improve gh-pages update workflow timing and conditions
 			</news>
 		</extension>
 	</addon>	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
