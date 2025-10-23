@@ -94,14 +94,6 @@ jobs:
           git commit -m "chore: bump version to ${{ steps.get_tag.outputs.NEW_VERSION }}" || echo "No changes to commit"
           git push || echo "No changes to push"
       
-      - name: Create and push tag
-        if: steps.check_commit.outputs.skip == 'false'
-        run: |
-          git tag ${{ steps.get_tag.outputs.NEW_VERSION }}
-          git push origin ${{ steps.get_tag.outputs.NEW_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Check if release exists
         if: steps.check_commit.outputs.skip == 'false'
         id: check_release
@@ -121,7 +113,7 @@ jobs:
         run: |
           zip -r plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip plugin.video.nextgenrt
       
-      - name: Create Release
+      - name: Create Release with Tag
         if: steps.check_release.outputs.exists == 'false'
         uses: softprops/action-gh-release@v1
         with:
