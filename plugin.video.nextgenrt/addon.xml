@@ -9,7 +9,7 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">NextGen RT News</summary>
-		<description lang="en">NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), and Arabic channels.</description>
+		<description lang="en">NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), and Arabic channels. Automatic updates available via repository.</description>
 		<disclaimer lang="en">Feel free to use this script.</disclaimer>
 		<platform>all</platform>
 		<language>en</language>
