@@ -4,7 +4,8 @@ A Kodi video plugin that streams RT News live channels directly in Kodi.
 
 ## Description
 
-NextGen RT News is a Kodi addon that provides access to RT (Russia Today) News live streams. The plugin automatically extracts stream URLs from RT's web pages and plays them using Kodi's built-in video player with HLS (HTTP Live Streaming) support.
+NextGen RT News is a Kodi addon that provides access to RT (Russia Today) News live streams.
+The plugin automatically extracts stream URLs from RT's web pages and plays them using Kodi's built-in video player with HLS (HTTP Live Streaming) support.
 
 ## Features
 
