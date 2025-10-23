@@ -164,6 +164,7 @@ jobs:
       - name: Wait for release asset
         run: |
           VERSION="${{ needs.auto-tag.outputs.new_version }}"
+          VERSION_NUMBER="${VERSION#v}"
           echo "Waiting for release ${VERSION} asset to be available..."
           for i in {1..30}; do
             if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
@@ -177,9 +178,10 @@ jobs:
       - name: Download latest release zip
         run: |
           VERSION="${{ needs.auto-tag.outputs.new_version }}"
+          VERSION_NUMBER="${VERSION#v}"
           wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" \
-            -O plugin.video.nextgenrt/plugin.video.nextgenrt-${VERSION}.zip
-          echo "Downloaded plugin version ${VERSION}"
+            -O plugin.video.nextgenrt/plugin.video.nextgenrt-${VERSION_NUMBER}.zip
+          echo "Downloaded plugin version ${VERSION} as ${VERSION_NUMBER}"
       
       - name: Update addons.xml
         run: |
