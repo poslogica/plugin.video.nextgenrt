@@ -112,7 +112,9 @@ GNU GENERAL PUBLIC LICENSE Version 2, June 1991
 
 ## Disclaimer
 
-This plugin is not affiliated with or endorsed by RT (Russia Today). It simply provides a convenient way to access publicly available RT News streams within Kodi. Users are responsible for ensuring their use complies with RT's terms of service and local regulations.
+This plugin is not affiliated with or endorsed by RT (Russia Today).
+It simply provides a convenient way to access publicly available RT News streams within Kodi.
+Users are responsible for ensuring their use complies with RT's terms of service and local regulations.
 
 ## Contributing
 
