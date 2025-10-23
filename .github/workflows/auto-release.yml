@@ -188,6 +188,42 @@ jobs:
           if [ -f repository.nextgenrt/repository.nextgenrt-1.0.0.zip ]; then
             cp -f repository.nextgenrt/repository.nextgenrt-1.0.0.zip downloads/
           fi
+
+      - name: Generate static downloads index (for Kodi)
+        run: |
+          # Kodi's file manager doesn't execute JavaScript, so generate a plain HTML listing
+          cat > downloads/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Downloads - NextGen RT News</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 24px; max-width: 900px; margin: 0 auto; }
+              h1 { color: #8BC63F; }
+              ul { line-height: 1.9; }
+              a { color: #0060df; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+              .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+            </style>
+          </head>
+          <body>
+            <h1>Downloads</h1>
+            <p>Direct download files:</p>
+            <ul>
+          EOF
+          for f in downloads/*.zip; do
+            [ -e "$f" ] || continue
+            base=$(basename "$f")
+            echo "              <li><a class=\"mono\" href=\"$base\">$base</a></li>" >> downloads/index.html
+          done
+          cat >> downloads/index.html << 'EOF'
+            </ul>
+            <p class="mono">This index is generated automatically.</p>
+          </body>
+          </html>
+          EOF
       
       - name: Update addons.xml
         run: |
@@ -215,6 +251,6 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add plugin.video.nextgenrt/*.zip addons.xml addons.xml.md5 plugin.video.nextgenrt/addon.xml downloads/repository.nextgenrt-*.zip || true
+          git add plugin.video.nextgenrt/*.zip addons.xml addons.xml.md5 plugin.video.nextgenrt/addon.xml downloads/repository.nextgenrt-*.zip downloads/index.html || true
           git commit -m "chore: update repository with plugin ${{ needs.auto-tag.outputs.new_version }}" || echo "No changes"
           git push || echo "No changes to push"
