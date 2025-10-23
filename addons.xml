@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.12" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.13" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -17,10 +17,10 @@
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 			<website>https://www.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-			<news>[B]NextGen RT News ChangeLog v1.0.12 - 2025-10-23[/B]
-	- docs: point users to downloads/ for repository zip
-	- feat: publish plugin zips to gh-pages/downloads and prune to latest 5
-	- fix: remove 'v' prefix from plugin zip filename in gh-pages
+			<news>[B]NextGen RT News ChangeLog v1.0.13 - 2025-10-23[/B]
+	- feat: Add new channel
+	- chore: generate static downloads index for Kodi
+	- chore: sync workflow changes
 			</news>
 		</extension>
 	</addon>	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">

@@ -5,79 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Downloads - NextGen RT News</title>
   <style>
-    :root { --rt: #8BC63F; }
     body { font-family: Arial, sans-serif; padding: 24px; max-width: 900px; margin: 0 auto; }
-    h1 { color: var(--rt); }
-    .hint { color:#666; margin-bottom: 16px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px 8px; border-bottom: 1px solid #eee; }
-    th { text-align: left; color:#333; }
+    h1 { color: #8BC63F; }
+    ul { line-height: 1.9; }
+    a { color: #0060df; text-decoration: none; }
+    a:hover { text-decoration: underline; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .error { color:#b00020; }
   </style>
 </head>
 <body>
   <h1>Downloads</h1>
-  <p class="hint">This is an automatic directory listing of files in <span class="mono">/downloads</span>.</p>
-
-  <div id="content">
-    <p>Loading directory listing…</p>
-  </div>
-
-  <script>
-    (async function() {
-      const owner = 'poslogica';
-      const repo = 'plugin.video.nextgenrt';
-      const path = 'downloads';
-      const ref = 'gh-pages';
-      const api = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${ref}`;
-
-      function formatSize(bytes){
-        if (bytes === 0 || bytes == null) return '-';
-        const i = Math.floor(Math.log(bytes) / Math.log(1024));
-        const sizes = ['B','KB','MB','GB'];
-        return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
-      }
-
-      try {
-        const res = await fetch(api, { headers: { 'Accept': 'application/vnd.github+json' }});
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const items = await res.json();
-
-        const files = items
-          .filter(i => i.type === 'file' && i.name !== 'index.html')
-          .sort((a,b) => b.name.localeCompare(a.name, undefined, { numeric: true, sensitivity: 'base' }));
-
-        if (!files.length) {
-          document.getElementById('content').innerHTML = '<p>No files found.</p>';
-          return;
-        }
-
-        const rows = files.map(f => `
-          <tr>
-            <td class="mono"><a href="${f.name}">${f.name}</a></td>
-            <td>${formatSize(f.size)}</td>
-          </tr>
-        `).join('');
-
-        document.getElementById('content').innerHTML = `
-          <table aria-label="Directory listing">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Size</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        `;
-      } catch (e) {
-        document.getElementById('content').innerHTML = `
-          <p class="error">Failed to load directory listing. You can browse the folder on GitHub:</p>
-          <p><a class="mono" href="https://github.com/${owner}/${repo}/tree/${ref}/${path}">https://github.com/${owner}/${repo}/tree/${ref}/${path}</a></p>
-        `;
-      }
-    })();
-  </script>
+  <p>Direct download files:</p>
+  <ul>
+              <li><a class="mono" href="repository.nextgenrt-1.0.0.zip">repository.nextgenrt-1.0.0.zip</a></li>
+  </ul>
+  <p class="mono">This index is generated automatically.</p>
 </body>
 </html>
