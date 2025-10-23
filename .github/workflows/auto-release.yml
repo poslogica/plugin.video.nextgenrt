@@ -88,9 +88,7 @@ jobs:
       
       - name: Create plugin zip
         run: |
-          cd plugin.video.nextgenrt
-          zip -r ../plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip .
-          cd ..
+          zip -r plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip plugin.video.nextgenrt
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
