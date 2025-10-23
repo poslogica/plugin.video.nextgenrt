@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.8" provider-name="poslogica">
 	<requires>
-		<import addon="xbmc.python" version="1.0.8" />
+		<import addon="xbmc.python" version="3.0.1" />
 		<import addon="inputstream.adaptive" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">

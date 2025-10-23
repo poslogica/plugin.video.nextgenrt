@@ -73,8 +73,9 @@ jobs:
           # Create news entry
           NEWS_ENTRY="[B]NextGen RT News ChangeLog $VERSION - $CURRENT_DATE[/B]\n$COMMIT_MESSAGES"
           
-          # Update version in addon.xml
-          sed -i "s/version=\"[0-9]*\.[0-9]*\.[0-9]*\"/version=\"$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
+          # Update ONLY the addon version in addon.xml (not xbmc.python version)
+          # Match: <addon id="plugin.video.nextgenrt" ... version="X.X.X" ...>
+          sed -i "s/\(<addon [^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
           
           # Update news section in addon.xml (replace content between <news> tags)
           # Using perl for better multi-line handling
