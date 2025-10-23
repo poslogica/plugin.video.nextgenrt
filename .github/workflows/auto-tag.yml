@@ -85,3 +85,31 @@ jobs:
           git push origin ${{ steps.get_tag.outputs.NEW_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create plugin zip
+        run: |
+          cd plugin.video.nextgenrt
+          zip -r ../plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip .
+          cd ..
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_tag.outputs.NEW_VERSION }}
+          name: NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
+          files: plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
+          body: |
+            ## NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
+            
+            ### Installation
+            1. Download the `plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip` file below
+            2. In Kodi, go to Settings → Add-ons → Install from zip file
+            3. Select the downloaded zip file
+            4. The plugin will automatically install InputStream Adaptive if needed
+            
+            ### What's Changed
+            See the [README](https://github.com/poslogica/plugin.video.nextgenrt/blob/main/README.md) for full details.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
