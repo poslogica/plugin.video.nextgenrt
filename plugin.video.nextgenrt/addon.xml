@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.7" provider-name="poslogica">
+<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.8" provider-name="poslogica">
 	<requires>
-		<import addon="xbmc.python" version="1.0.7" />
+		<import addon="xbmc.python" version="1.0.8" />
 		<import addon="inputstream.adaptive" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
@@ -16,9 +16,8 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<website>https://www.rt.com</website>
 		<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-		<news>[B]NextGen RT News ChangeLog v1.0.7 - 2025-10-23[/B]
-- fix: Minor fixes
-- fix: create tag and release atomically to prevent asset upload errors
+		<news>[B]NextGen RT News ChangeLog v1.0.8 - 2025-10-23[/B]
+- fix: Minor fix
 		</news>
 	</extension>
 </addon>
