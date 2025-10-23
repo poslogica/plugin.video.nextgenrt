@@ -1,4 +1,4 @@
-name: Auto Tag on Push
+name: Auto Version and Release
 
 on:
   push:
