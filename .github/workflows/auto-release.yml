@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      skip: ${{ steps.check_commit.outputs.skip }}
+      new_version: ${{ steps.get_tag.outputs.NEW_VERSION }}
+      release_created: ${{ steps.check_release.outputs.exists == 'false' }}
     
     steps:
       - name: Checkout code
@@ -136,3 +140,60 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  update-repository:
+    runs-on: ubuntu-latest
+    needs: auto-tag
+    if: needs.auto-tag.outputs.skip == 'false' && needs.auto-tag.outputs.release_created == 'true'
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Checkout main branch addon files
+        run: |
+          git fetch origin main
+          git checkout origin/main -- plugin.video.nextgenrt/addon.xml repository.nextgenrt/addon.xml
+      
+      - name: Download latest release zip
+        run: |
+          VERSION="${{ needs.auto-tag.outputs.new_version }}"
+          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" \
+            -O plugin.video.nextgenrt/plugin.video.nextgenrt-${VERSION}.zip
+          echo "Downloaded plugin version ${VERSION}"
+      
+      - name: Update addons.xml
+        run: |
+          # Create addons.xml from addon.xml files
+          cat > addons.xml << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <addons>
+          EOF
+          
+          # Add plugin addon
+          sed -n '/<addon/,/<\/addon>/p' plugin.video.nextgenrt/addon.xml | sed 's/^/\t/' >> addons.xml
+          
+          # Add repository addon
+          sed -n '/<addon/,/<\/addon>/p' repository.nextgenrt/addon.xml | sed 's/^/\t/' >> addons.xml
+          
+          echo "</addons>" >> addons.xml
+          
+          # Generate MD5
+          md5sum addons.xml | cut -d' ' -f1 > addons.xml.md5
+          
+          echo "Updated addons.xml and checksum"
+      
+      - name: Commit and push to gh-pages
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add plugin.video.nextgenrt/*.zip addons.xml addons.xml.md5 plugin.video.nextgenrt/addon.xml
+          git commit -m "chore: update repository with plugin ${{ needs.auto-tag.outputs.new_version }}" || echo "No changes"
+          git push || echo "No changes to push"
