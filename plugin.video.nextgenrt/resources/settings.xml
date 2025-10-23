@@ -1,0 +1,6 @@
+<settings>
+    <category label="General Settings">
+        <setting id="stream_quality" type="enum" label="Stream Quality" values="Low|Medium|High" default="High" />
+        <setting id="enable_subtitles" type="bool" label="Enable Subtitles" default="false" />
+    </category>
+</settings>

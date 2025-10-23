@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.0" provider-name="poslogica">
+	<requires>
+		<import addon="xbmc.python" version="3.0.1" />
+		<import addon="inputstream.adaptive" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">NextGen RT News</summary>
+		<description lang="en">NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, UK, Documentaries, Spanish, French, and Arabic channels.</description>
+		<disclaimer lang="en">Feel free to use this script.</disclaimer>
+		<platform>all</platform>
+		<language>en</language>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<website>https://www.rt.com</website>
+		<source>https://github.com/yourusername/plugin.video.nextgenrt</source>
+		<news>[B]NextGen RT News ChangeLog v1.0.0 - 2025-10-23[/B]
+1.0.0 Initial release
+		</news>
+	</extension>
+</addon>
