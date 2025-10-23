@@ -182,27 +182,11 @@ jobs:
           wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" \
             -O plugin.video.nextgenrt/plugin.video.nextgenrt-${VERSION_NUMBER}.zip
           echo "Downloaded plugin version ${VERSION} as ${VERSION_NUMBER}"
-
-          # Ensure downloads folder exists and copy zips for browsing
+          
+          # Ensure downloads folder exists and copy ONLY the repository zip for users
           mkdir -p downloads
-          cp -f plugin.video.nextgenrt/plugin.video.nextgenrt-${VERSION_NUMBER}.zip downloads/
-          # Also copy repository zip if present
           if [ -f repository.nextgenrt/repository.nextgenrt-1.0.0.zip ]; then
-            cp -n repository.nextgenrt/repository.nextgenrt-1.0.0.zip downloads/ || true
-          fi
-
-          # Retain only the latest 5 plugin zips in downloads to avoid bloat
-          KEEP=5
-          if ls downloads/plugin.video.nextgenrt-*.zip >/dev/null 2>&1; then
-            mapfile -t FILES < <(ls -1 downloads/plugin.video.nextgenrt-*.zip | sort -V)
-            COUNT=${#FILES[@]}
-            if [ "$COUNT" -gt "$KEEP" ]; then
-              TO_DELETE=$((COUNT-KEEP))
-              for ((i=0; i<TO_DELETE; i++)); do
-                echo "Removing old zip: ${FILES[$i]}"
-                rm -f "${FILES[$i]}"
-              done
-            fi
+            cp -f repository.nextgenrt/repository.nextgenrt-1.0.0.zip downloads/
           fi
       
       - name: Update addons.xml
@@ -231,6 +215,6 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add plugin.video.nextgenrt/*.zip addons.xml addons.xml.md5 plugin.video.nextgenrt/addon.xml downloads/*.zip || true
+          git add plugin.video.nextgenrt/*.zip addons.xml addons.xml.md5 plugin.video.nextgenrt/addon.xml downloads/repository.nextgenrt-*.zip || true
           git commit -m "chore: update repository with plugin ${{ needs.auto-tag.outputs.new_version }}" || echo "No changes"
           git push || echo "No changes to push"
