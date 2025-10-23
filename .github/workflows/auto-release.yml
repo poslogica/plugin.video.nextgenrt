@@ -21,7 +21,20 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Check if version bump commit
+        id: check_commit
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          if [[ "$COMMIT_MSG" == "chore: bump version to"* ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Skipping workflow - this is a version bump commit"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "Proceeding with workflow"
+          fi
+      
       - name: Get latest tag
+        if: steps.check_commit.outputs.skip == 'false'
         id: get_tag
         run: |
           # Get the latest tag, or use v0.0.0 if no tags exist
@@ -43,6 +56,7 @@ jobs:
           echo "New version: $NEW_VERSION"
       
       - name: Update addon.xml version and news
+        if: steps.check_commit.outputs.skip == 'false'
         run: |
           VERSION="${{ steps.get_tag.outputs.NEW_VERSION }}"
           VERSION_NUMBER="${VERSION#v}"
@@ -71,6 +85,7 @@ jobs:
           echo "Updated news section with latest changes"
       
       - name: Commit version update
+        if: steps.check_commit.outputs.skip == 'false'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -80,6 +95,7 @@ jobs:
           git push || echo "No changes to push"
       
       - name: Create and push tag
+        if: steps.check_commit.outputs.skip == 'false'
         run: |
           git tag ${{ steps.get_tag.outputs.NEW_VERSION }}
           git push origin ${{ steps.get_tag.outputs.NEW_VERSION }}
@@ -87,6 +103,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Check if release exists
+        if: steps.check_commit.outputs.skip == 'false'
         id: check_release
         run: |
           if gh release view ${{ steps.get_tag.outputs.NEW_VERSION }} > /dev/null 2>&1; then
