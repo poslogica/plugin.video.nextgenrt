@@ -144,7 +144,7 @@ jobs:
   update-repository:
     runs-on: ubuntu-latest
     needs: auto-tag
-    if: needs.auto-tag.outputs.skip == 'false' && needs.auto-tag.outputs.release_created == 'true'
+    if: needs.auto-tag.outputs.skip == 'false'
     permissions:
       contents: write
     
@@ -160,6 +160,19 @@ jobs:
         run: |
           git fetch origin main
           git checkout origin/main -- plugin.video.nextgenrt/addon.xml repository.nextgenrt/addon.xml
+      
+      - name: Wait for release asset
+        run: |
+          VERSION="${{ needs.auto-tag.outputs.new_version }}"
+          echo "Waiting for release ${VERSION} asset to be available..."
+          for i in {1..30}; do
+            if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
+              echo "Release asset is available!"
+              break
+            fi
+            echo "Attempt $i: Asset not ready yet, waiting 10 seconds..."
+            sleep 10
+          done
       
       - name: Download latest release zip
         run: |
