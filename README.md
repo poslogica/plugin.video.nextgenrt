@@ -133,4 +133,4 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 
 ## Support
 
-For issues, questions, or feature requests, please open an issue on the GitHub repository.
+Enjoy! For issues, questions, or feature requests, please open an issue on the GitHub repository.
