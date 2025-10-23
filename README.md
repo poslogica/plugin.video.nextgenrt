@@ -48,6 +48,12 @@ The plugin automatically extracts stream URLs from RT's web pages and plays them
 
 **Repository Homepage**: [https://poslogica.github.io/plugin.video.nextgenrt/](https://poslogica.github.io/plugin.video.nextgenrt/)
 
+Direct repository zip (browse or download):
+
+```text
+https://poslogica.github.io/plugin.video.nextgenrt/downloads/repository.nextgenrt-1.0.0.zip
+```
+
 ### Method 2: Install from ZIP file (One-time)
 
 1. Download the latest release zip file from [GitHub Releases](https://github.com/poslogica/plugin.video.nextgenrt/releases/latest)
