@@ -28,7 +28,27 @@ The plugin automatically extracts stream URLs from RT's web pages and plays them
 
 ## Installation
 
-### Method 1: Install from ZIP file
+### Method 1: Install from Repository (Recommended - Automatic Updates)
+
+1. In Kodi, go to **Settings** → **Add-ons**
+2. Enable **Unknown sources** if not already enabled (Settings → System → Add-ons → Unknown sources)
+3. Select **Install from zip file**
+4. When prompted for a path, select **"None"** and enter:
+
+   ```text
+   https://raw.githubusercontent.com/poslogica/plugin.video.nextgenrt/gh-pages/repository.nextgenrt/repository.nextgenrt-1.0.0.zip
+   ```
+
+5. Wait for the repository installation notification
+6. Go back and select **Install from repository** → **NextGen RT Repository**
+7. Select **Video add-ons** → **NextGen RT News** → **Install**
+8. The plugin will automatically install **InputStream Adaptive** if needed
+
+**Benefits**: Once the repository is installed, you'll automatically receive updates when new versions are released!
+
+**Repository Homepage**: [https://poslogica.github.io/plugin.video.nextgenrt/](https://poslogica.github.io/plugin.video.nextgenrt/)
+
+### Method 2: Install from ZIP file (One-time)
 
 1. Download the latest release zip file from [GitHub Releases](https://github.com/poslogica/plugin.video.nextgenrt/releases/latest)
 2. In Kodi, go to **Settings** → **Add-ons**
@@ -38,7 +58,7 @@ The plugin automatically extracts stream URLs from RT's web pages and plays them
 6. Wait for the addon installation notification
 7. The plugin will automatically install **InputStream Adaptive** if needed
 
-### Method 2: Manual Installation
+### Method 3: Manual Installation
 
 1. Copy the `plugin.video.nextgenrt` folder to your Kodi addons directory:
    - **Windows**: `%APPDATA%\Kodi\addons\`
