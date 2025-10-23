@@ -86,11 +86,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Check if release exists
+        id: check_release
+        run: |
+          if gh release view ${{ steps.get_tag.outputs.NEW_VERSION }} > /dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Release ${{ steps.get_tag.outputs.NEW_VERSION }} already exists, skipping"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Release ${{ steps.get_tag.outputs.NEW_VERSION }} does not exist, will create"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Create plugin zip
+        if: steps.check_release.outputs.exists == 'false'
         run: |
           zip -r plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip plugin.video.nextgenrt
       
       - name: Create Release
+        if: steps.check_release.outputs.exists == 'false'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.get_tag.outputs.NEW_VERSION }}
