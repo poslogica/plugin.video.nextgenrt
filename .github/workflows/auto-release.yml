@@ -205,20 +205,23 @@ jobs:
           # Upload the Kodi repository zip (if present) to Internet Archive
           FILE=$(ls downloads/repository.nextgenrt-*.zip 2>/dev/null | head -n1 || true)
           if [ -n "$FILE" ] && [ -n "${IA_ACCESS_KEY:-}" ] && [ -n "${IA_SECRET_KEY:-}" ]; then
-            # Configure Internet Archive CLI with the provided credentials (include required screenname)
+            # Configure Internet Archive CLI with the provided credentials (expected sections/keys)
             mkdir -p "$HOME/.config"
             SCREENNAME=${GITHUB_REPOSITORY_OWNER:-poslogica}
-            printf "%s\n" \
-              "[general]" \
-              "screenname = ${SCREENNAME}" \
-              "access_key = ${IA_ACCESS_KEY}" \
-              "secret_key = ${IA_SECRET_KEY}" \
-              > "$HOME/.config/ia.ini"
-            chmod 600 "$HOME/.config/ia.ini"
+            CONFIG_FILE="$HOME/.config/ia.ini"
+            {
+              echo "[general]";
+              echo "screenname = ${SCREENNAME}";
+              echo;
+              echo "[s3]";
+              echo "access = ${IA_ACCESS_KEY}";
+              echo "secret = ${IA_SECRET_KEY}";
+            } > "$CONFIG_FILE"
+            chmod 600 "$CONFIG_FILE"
 
             IDENTIFIER="nextgenrt-kodi-repo"
             echo "Uploading $FILE to Internet Archive as item: $IDENTIFIER"
-            ia upload "$IDENTIFIER" "$FILE" \
+            ia -c "$HOME/.config/ia.ini" upload "$IDENTIFIER" "$FILE" \
               --metadata="title:NextGen RT Kodi Repository" \
               --metadata="mediatype:software" \
               --metadata="collection:opensource" \
