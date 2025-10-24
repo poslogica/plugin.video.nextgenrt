@@ -285,7 +285,7 @@ jobs:
             
             # Delete old repository zip to clear cache
             echo "Deleting old repository zip from Internet Archive to clear cache"
-            ia -c "$CONFIG_FILE" delete "$IDENTIFIER" "repository.nextgenrt-${REPO_VERSION}.zip" --ignore-errors || true
+            ia -c "$CONFIG_FILE" delete "$IDENTIFIER" "repository.nextgenrt-${REPO_VERSION}.zip" || echo "File not found or deletion failed, continuing..."
             
             # Upload repository zip
             if [ -f "plugin-downloads/repository.nextgenrt-"*.zip ]; then
