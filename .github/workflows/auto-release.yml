@@ -226,7 +226,7 @@ jobs:
 
           # Download RT repository plugin
           wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION}.zip" \
-            -O plugin-downloads/repository.nextgenrt-${REPO_VERSION}.zip
+            -O plugin-downloads/repository.nextgenrt-${REPO_VERSION_NUMBER}.zip
           echo "Downloaded RT repository plugin version ${REPO_VERSION}"
 
       - name: Setup Python (for Internet Archive CLI)
