@@ -342,8 +342,8 @@ jobs:
           
           echo "</addons>" >> addons.xml
           
-          # Generate MD5
-          md5sum addons.xml | cut -d' ' -f1 > addons.xml.md5
+          # Generate MD5 (hash only, no filename)
+          md5sum addons.xml | awk '{print $1}' > addons.xml.md5
           
           echo "Updated addons.xml with both plugins and checksum"
 
