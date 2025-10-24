@@ -4,99 +4,351 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NextGen RT News - Kodi Repository</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 198, 63, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            position: relative;
+            z-index: 1;
         }
+        
         .header {
-            background: linear-gradient(135deg, #8BC63F, #6FA830);
-            color: black;
-            padding: 30px;
-            border-radius: 10px;
             text-align: center;
+            margin: 60px 0 50px;
+        }
+        
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #8BC63F 0%, #6FA830 50%, #5a8a23 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            font-weight: 300;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 40px;
             margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
-        .content {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        
+        .card:hover {
+            border-color: rgba(139, 198, 63, 0.3);
+            box-shadow: 0 12px 48px rgba(139, 198, 63, 0.15);
         }
-        code {
-            background: #f0f0f0;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: monospace;
+        
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #8BC63F;
+            font-weight: 700;
         }
+        
+        .card h3 {
+            font-size: 1.3rem;
+            margin: 25px 0 15px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+        
+        .card p, .card li {
+            color: #cbd5e1;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        
+        .card ol {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+        
+        .card li {
+            margin-bottom: 12px;
+        }
+        
+        .card strong {
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+        
+        .install-box {
+            background: linear-gradient(135deg, rgba(139, 198, 63, 0.1) 0%, rgba(139, 198, 63, 0.05) 100%);
+            border: 1.5px solid rgba(139, 198, 63, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        
         .install-url {
-            background: #e8f5e9;
-            padding: 15px;
+            background: rgba(15, 23, 42, 0.5);
             border-left: 4px solid #8BC63F;
-            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
             word-break: break-all;
         }
+        
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #86efac;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
         .cta {
             display: inline-block;
-            background: #8BC63F;
-            color: #000;
-            padding: 10px 14px;
-            border-radius: 6px;
+            background: linear-gradient(135deg, #8BC63F 0%, #6FA830 100%);
+            color: #0f172a;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: bold;
-            margin: 6px 0 0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(139, 198, 63, 0.3);
         }
-        ol {
-            line-height: 1.8;
+        
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 198, 63, 0.4);
         }
-        h2 {
+        
+        .cta-secondary {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1.5px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .cta-secondary:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            background: rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+        }
+        
+        .addon-list {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .addon-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #8BC63F;
+        }
+        
+        .addon-item strong {
             color: #8BC63F;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .link-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            text-decoration: none;
+            color: #60a5fa;
+            transition: all 0.3s ease;
+        }
+        
+        .link-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .cta {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🎬 NextGen RT News Repository</h1>
-        <p>Kodi Plugin Repository for RT News Streaming</p>
-    </div>
-    
-    <div class="content">
-        <h2>📦 Installation</h2>
-        <p>To install this repository in Kodi (recommended method with automatic updates):</p>
-        <ol>
-            <li>Open Kodi and go to <strong>Settings</strong> → <strong>Add-ons</strong></li>
-            <li>Select <strong>Install from zip file</strong></li>
-            <li>Enter either of the following URLs:</li>
-        </ol>
-        
-        <div class="install-url">
-                        <div>Direct repository zip (Internet Archive):<br>
-                            <code>https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt-1.0.0.zip</code><br>
-                            <a class="cta" href="https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt-1.0.0.zip">Download repository ZIP</a>
-                        </div>
-                        <div style="margin-top:10px">Browsable downloads page (IA):<br>
-                            <code>https://archive.org/download/nextgenrtkodirepository/</code>
-                            <a class="cta" href="https://archive.org/download/nextgenrtkodirepository/">Open IA downloads</a>
-                        </div>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 NextGen RT News</h1>
+            <p>Kodi Plugin Repository for RT News Streaming</p>
         </div>
         
-        <p>Once the repository is installed, go to <strong>Install from repository</strong> → <strong>NextGen RT Repository</strong> → <strong>Video add-ons</strong> and install <strong>NextGen RT News</strong>. Updates will be automatic.</p>
+        <div class="card">
+            <h2>📦 Installation Guide</h2>
+            <p>To install this repository in Kodi and get automatic updates:</p>
+            
+            <div class="install-box">
+                <h3>Step 1: Get the Repository ZIP</h3>
+                <p>Download the repository addon from Internet Archive:</p>
+                <div class="install-url">
+                    <code>https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt/repository.nextgenrt-1.0.1.zip</code>
+                </div>
+                <div class="btn-group">
+                    <a class="cta" href="https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt/repository.nextgenrt-1.0.1.zip">⬇️ Download Repository ZIP</a>
+                    <a class="cta cta-secondary" href="https://archive.org/download/nextgenrtkodirepository/" target="_blank" rel="noopener noreferrer">📂 Browse All Files</a>
+                </div>
+            </div>
+            
+            <div class="install-box">
+                <h3>Step 2: Install in Kodi</h3>
+                <ol>
+                    <li>Open <strong>Kodi</strong> on your device</li>
+                    <li>Navigate to <strong>Settings</strong> → <strong>Add-ons</strong></li>
+                    <li>Click <strong>Install from zip file</strong></li>
+                    <li>Locate and select the downloaded <code>repository.nextgenrt-1.0.1.zip</code></li>
+                    <li>Wait for the installation to complete</li>
+                </ol>
+            </div>
+            
+            <div class="install-box">
+                <h3>Step 3: Install Plugins</h3>
+                <ol>
+                    <li>Go to <strong>Add-ons</strong> → <strong>Install from repository</strong></li>
+                    <li>Select <strong>NextGen RT Repository</strong></li>
+                    <li>Click <strong>Video add-ons</strong></li>
+                    <li>Install <strong>NextGen RT News</strong></li>
+                    <li>Updates will be automatic!</li>
+                </ol>
+            </div>
+        </div>
         
-        <h2>📺 Available Addons</h2>
-        <ul>
-            <li><strong>NextGen RT News</strong> - Stream RT News channels (Global, US, Documentaries, Spanish, Arabic, German, French, Serbian)</li>
-        </ul>
+        <div class="card">
+            <h2>📺 Available Add-ons</h2>
+            <div class="addon-list">
+                <div class="addon-item">
+                    <strong>🎬 NextGen RT News</strong>
+                    <p>Stream RT News channels with multiple language and regional options:</p>
+                    <p>Global • US • Documentaries • Spanish • Arabic • German • French • Serbian</p>
+                </div>
+                <div class="addon-item">
+                    <strong>📺 NextGen RT TV Series</strong>
+                    <p>Browse and stream RT Documentary TV series directly in Kodi</p>
+                </div>
+            </div>
+        </div>
         
-        <h2>🔗 Links</h2>
-        <ul>
-            <li><a href="https://github.com/poslogica/plugin.video.nextgenrt">GitHub Repository</a></li>
-            <li><a href="https://archive.org/download/nextgenrtkodirepository/">Downloads (Repository ZIP)</a></li>
-            <li><a href="https://archive.org/download/nextgenrtkodirepository/addons.xml">addons.xml</a></li>
-            <li><a href="https://www.rt.com">RT.com</a></li>
-        </ul>
+        <div class="card">
+            <h2>🔗 Quick Links</h2>
+            <div class="links-grid">
+                <a href="https://github.com/poslogica/plugin.video.nextgenrt" class="link-card">
+                    <strong>💻 GitHub Repository</strong>
+                    <p>View source code and contribute</p>
+                </a>
+                <a href="https://archive.org/download/nextgenrtkodirepository/" class="link-card">
+                    <strong>📥 Download Center</strong>
+                    <p>Access all add-on files</p>
+                </a>
+                <a href="https://www.rt.com" class="link-card">
+                    <strong>📰 RT.com</strong>
+                    <p>Visit RT News website</p>
+                </a>
+                <a href="https://archive.org/download/nextgenrtkodirepository/addons.xml" class="link-card">
+                    <strong>📋 addons.xml</strong>
+                    <p>Repository index file</p>
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>NextGen RT News Repository • Powered by Kodi • Mirrored on Internet Archive</p>
+        </div>
     </div>
 </body>
 </html>
