@@ -176,7 +176,7 @@ jobs:
       - name: Wait for release assets
         run: |
           VERSION="${{ needs.auto-tag.outputs.new_version }}"
-          
+
           echo "Waiting for release ${VERSION} assets to be available..."
           for i in {1..30}; do
             if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
@@ -225,7 +225,7 @@ jobs:
           echo "Downloaded TV series video plugin version ${VERSION}"
 
           # Download RT repository plugin
-          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION_NUMBER}.zip" \
+          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION}.zip" \
             -O plugin-downloads/repository.nextgenrt-${REPO_VERSION}.zip
           echo "Downloaded RT repository plugin version ${REPO_VERSION}"
 
