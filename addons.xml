@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.31" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.32" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -21,14 +21,38 @@
 				<icon>icon.png</icon>
 				<fanart>fanart.jpg</fanart>
 			</assets>
-			<news>[B]NextGen RT News ChangeLog v1.0.31 - 2025-10-24[/B]
-	- Merge pull request #2 from poslogica/feature/tvseries
-	- fix: Add assets to repository addon in addons.xml
-	- fix: Remove asset URLs from addons.xml - let Kodi use extracted assets from plugins
-	- fix: Use direct IA URLs for addon icons/fanart in addons.xml
+			<news>[B]NextGen RT News ChangeLog v1.0.32 - 2025-10-24[/B]
+	- fix: add missing addon
+	- fix: Include TV series addon.xml in workflow checkout for addons.xml generation
 			</news>
 		</extension>
-	</addon>	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
+	</addon>	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.32" provider-name="poslogica">
+		<requires>
+			<import addon="xbmc.python" version="3.0.1" />
+			<import addon="inputstream.adaptive" />
+		</requires>
+		<extension point="xbmc.python.pluginsource" library="default.py">
+			<provides>video</provides>
+		</extension>
+		<extension point="xbmc.addon.metadata">
+			<summary lang="en">NextGen RT TV Series</summary>
+			<description lang="en">NextGen RT TV Series Kodi Plugin. Browse and stream RT Documentary TV series directly in Kodi. Automatic updates available via repository.</description>
+			<disclaimer lang="en">Feel free to use this script.</disclaimer>
+			<platform>all</platform>
+			<language>en</language>
+			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+			<website>https://rtd.rt.com</website>
+			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
+			<assets>
+				<icon>icon.png</icon>
+				<fanart>fanart.jpg</fanart>
+			</assets>
+			<news>[B]NextGen RT TV Series ChangeLog v1.0.0 - 2025-10-24[/B]
+	- Initial release: Browse and stream RT documentary series
+			</news>
+		</extension>
+	</addon>
+	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
 		<extension point="xbmc.addon.repository" name="NextGen RT Repository">
 			<dir>
 				<info compressed="false">https://archive.org/download/nextgenrtkodirepository/addons.xml</info>
