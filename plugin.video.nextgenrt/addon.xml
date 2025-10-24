@@ -16,10 +16,6 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<website>https://www.rt.com</website>
 		<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-		<assets>
-			<icon>icon.png</icon>
-			<fanart>fanart.jpg</fanart>
-		</assets>
 		<news>[B]NextGen RT News ChangeLog v1.0.32 - 2025-10-24[/B]
 - fix: add missing addon
 - fix: Include TV series addon.xml in workflow checkout for addons.xml generation
