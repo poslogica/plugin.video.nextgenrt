@@ -116,8 +116,10 @@ https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt-1.0.0.
 
 ```text
 plugin.video.nextgenrt/
-├── addon.xml                 # Plugin metadata and dependencies
+├── addon.xml                # Plugin metadata and dependencies
 ├── default.py               # Entry point
+├── icon.png                 # Add-on icon
+├── fanart.jpg               # Add-on fanart
 ├── resources/
 │   ├── __init__.py
 │   ├── settings.xml         # Plugin settings (future use)
