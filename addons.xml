@@ -18,8 +18,8 @@
 			<website>https://www.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
 			<assets>
-				<icon>plugin.video.nextgenrt/icon.png</icon>
-				<fanart>plugin.video.nextgenrt/fanart.jpg</fanart>
+				<icon>https://archive.org/download/nextgenrtkodirepository/plugin.video.nextgenrt-1.0.29.zip</icon>
+				<fanart>https://archive.org/download/nextgenrtkodirepository/plugin.video.nextgenrt-1.0.29.zip</fanart>
 			</assets>
 		</extension>
 	</addon>
@@ -41,8 +41,8 @@
 			<website>https://rtdoc.tv</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
 			<assets>
-				<icon>plugin.video.nextgenrttvseries/icon.png</icon>
-				<fanart>plugin.video.nextgenrttvseries/fanart.jpg</fanart>
+				<icon>https://archive.org/download/nextgenrtkodirepository/plugin.video.nextgenrttvseries-1.0.0.zip</icon>
+				<fanart>https://archive.org/download/nextgenrtkodirepository/plugin.video.nextgenrttvseries-1.0.0.zip</fanart>
 			</assets>
 		</extension>
 	</addon>
@@ -60,8 +60,8 @@
 			<disclaimer lang="en"></disclaimer>
 			<platform>all</platform>
 			<assets>
-				<icon>repository.nextgenrt/icon.png</icon>
-				<fanart>repository.nextgenrt/fanart.jpg</fanart>
+				<icon>https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt-1.0.0.zip</icon>
+				<fanart>https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt-1.0.0.zip</fanart>
 			</assets>
 		</extension>
 	</addon>
