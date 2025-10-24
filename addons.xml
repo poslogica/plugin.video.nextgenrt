@@ -34,7 +34,9 @@
 		<extension point="xbmc.addon.metadata">
 			<summary lang="en">NextGen RT TV Series</summary>
 			<description lang="en">NextGen RT TV Series Kodi Plugin. Browse and stream RT Documentary TV series directly in Kodi. Automatic updates available via repository.</description>
-			<disclaimer lang="en">Feel free to use this script.</disclaimer>
+			<disclaimer lang="en">This plugin is not affiliated with or endorsed by RT (Russia Today).
+It simply provides a convenient way to access publicly available RT News streams within Kodi.
+Users are responsible for ensuring their use complies with RT's terms of service and local regulations.</disclaimer>
 			<platform>all</platform>
 			<language>en</language>
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
