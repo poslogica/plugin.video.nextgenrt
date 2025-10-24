@@ -175,7 +175,6 @@ def play_video(url):
             xbmc.log("NextGen RT News - Setting up HLS stream with inputstream.adaptive", xbmc.LOGINFO)
             # For Kodi 19+ (Matrix and later)
             list_item.setProperty('inputstream', 'inputstream.adaptive')
-            list_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
             list_item.setContentLookup(False)
             
         xbmcplugin.setResolvedUrl(HANDLE, True, list_item)
