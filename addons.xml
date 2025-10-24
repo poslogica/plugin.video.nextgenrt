@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.29" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.40" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -19,7 +19,7 @@
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
 		</extension>
 	</addon>
-	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.0" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.40" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
