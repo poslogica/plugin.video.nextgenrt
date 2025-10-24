@@ -347,6 +347,17 @@ jobs:
           
           echo "Updated addons.xml with both plugins and checksum"
 
+      - name: Commit root addons.xml to main
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # The addons.xml was generated in the current directory
+          # Copy it to the root (where it should be in the repo)
+          git add addons.xml
+          git commit -m "chore: update root addons.xml with current plugin versions" || echo "No changes to commit"
+          git push origin main || echo "Push failed or no changes"
+
       - name: Upload addons.xml and md5 to Internet Archive
         env:
           IA_ACCESS_KEY: ${{ secrets.IA_ACCESS_KEY }}
