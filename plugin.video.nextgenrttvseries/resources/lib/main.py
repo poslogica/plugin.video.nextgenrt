@@ -305,6 +305,10 @@ def _extract_episodes_list(html):
                         'season': 1
                     })
     
+    # Log what we extracted
+    unique_seasons = sorted(set(ep.get('season', 1) for ep in episodes))
+    xbmc.log("NextGen RT TV Series - _extract_episodes_list: extracted %d episodes with seasons %s" % (len(episodes), str(unique_seasons)), xbmc.LOGINFO)
+    
     return episodes
 
 def list_episodes(series_url):
