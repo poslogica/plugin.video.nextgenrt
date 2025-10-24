@@ -385,6 +385,8 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add plugin.video.nextgenrt/*.zip addons.xml addons.xml.md5 plugin.video.nextgenrt/addon.xml downloads/repository.nextgenrt-*.zip downloads/index.html || true
-          git commit -m "chore: update repository with plugin ${{ needs.auto-tag.outputs.new_version }}" || echo "No changes"
+          # Only commit addons.xml and checksum (which point to IA)
+          # Don't commit plugin zips to gh-pages - they come from IA
+          git add addons.xml addons.xml.md5 || true
+          git commit -m "chore: update addons.xml with plugin ${{ needs.auto-tag.outputs.new_version }}" || echo "No changes"
           git push || echo "No changes to push"
