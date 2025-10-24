@@ -205,9 +205,15 @@ jobs:
           # Upload the Kodi repository zip (if present) to Internet Archive
           FILE=$(ls downloads/repository.nextgenrt-*.zip 2>/dev/null | head -n1 || true)
           if [ -n "$FILE" ] && [ -n "${IA_ACCESS_KEY:-}" ] && [ -n "${IA_SECRET_KEY:-}" ]; then
-            # Configure Internet Archive CLI with the provided credentials (avoid heredoc indentation issues)
+            # Configure Internet Archive CLI with the provided credentials (include required screenname)
             mkdir -p "$HOME/.config"
-            printf "%s\n" "[general]" "access_key = ${IA_ACCESS_KEY}" "secret_key = ${IA_SECRET_KEY}" > "$HOME/.config/ia.ini"
+            SCREENNAME=${GITHUB_REPOSITORY_OWNER:-poslogica}
+            printf "%s\n" \
+              "[general]" \
+              "screenname = ${SCREENNAME}" \
+              "access_key = ${IA_ACCESS_KEY}" \
+              "secret_key = ${IA_SECRET_KEY}" \
+              > "$HOME/.config/ia.ini"
             chmod 600 "$HOME/.config/ia.ini"
 
             IDENTIFIER="nextgenrt-kodi-repo"
