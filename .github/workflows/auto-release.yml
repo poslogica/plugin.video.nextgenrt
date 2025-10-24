@@ -213,6 +213,7 @@ jobs:
               --metadata="collection:opensource" \
               --metadata="creator:${{ github.repository_owner }}" \
               --metadata="subject:Kodi;Addon;Repository" \
+              --no-derive \
               --retries 5
           else
             echo "Skipping Internet Archive upload (file or credentials missing)."
