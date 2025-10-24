@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.26" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.27" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -21,8 +21,8 @@
 				<icon>icon.png</icon>
 				<fanart>fanart.jpg</fanart>
 			</assets>
-			<news>[B]NextGen RT News ChangeLog v1.0.26 - 2025-10-24[/B]
-	- fix: update readme
+			<news>[B]NextGen RT News ChangeLog v1.0.27 - 2025-10-24[/B]
+	- feat: add localised strings
 			</news>
 		</extension>
 	</addon>	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
