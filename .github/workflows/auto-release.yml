@@ -77,8 +77,7 @@ jobs:
           # Create news entry
           NEWS_ENTRY="[B]NextGen RT News ChangeLog $VERSION - $CURRENT_DATE[/B]\n$COMMIT_MESSAGES"
           
-          # Update main plugin version
-          # Match: <addon id="plugin.video.nextgenrt" ... version="X.X.X" ...>
+          # Update rt news plugin version to match
           sed -i "s/\(<addon id=\"plugin.video.nextgenrt\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
           
           # Update TV series plugin version to match
@@ -133,6 +132,7 @@ jobs:
           files: |
             plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
             plugin.video.nextgenrttvseries-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
+            repository.nextgenrt-1.0.0.zip
           body: |
             ## NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
             
