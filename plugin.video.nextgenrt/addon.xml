@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.31" provider-name="poslogica">
+<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.32" provider-name="poslogica">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1" />
 		<import addon="inputstream.adaptive" />
@@ -20,11 +20,9 @@
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>[B]NextGen RT News ChangeLog v1.0.31 - 2025-10-24[/B]
-- Merge pull request #2 from poslogica/feature/tvseries
-- fix: Add assets to repository addon in addons.xml
-- fix: Remove asset URLs from addons.xml - let Kodi use extracted assets from plugins
-- fix: Use direct IA URLs for addon icons/fanart in addons.xml
+		<news>[B]NextGen RT News ChangeLog v1.0.32 - 2025-10-24[/B]
+- fix: add missing addon
+- fix: Include TV series addon.xml in workflow checkout for addons.xml generation
 		</news>
 	</extension>
 </addon>
