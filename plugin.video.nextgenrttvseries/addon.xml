@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.0" provider-name="poslogica">
+	<requires>
+		<import addon="xbmc.python" version="3.0.1" />
+		<import addon="inputstream.adaptive" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">NextGen RT TV Series</summary>
+		<description lang="en">NextGen RT TV Series Kodi Plugin. Browse and stream RT Documentary TV series directly in Kodi. Automatic updates available via repository.</description>
+		<disclaimer lang="en">Feel free to use this script.</disclaimer>
+		<platform>all</platform>
+		<language>en</language>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<website>https://rtd.rt.com</website>
+		<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+		</assets>
+		<news>[B]NextGen RT TV Series ChangeLog v1.0.0 - 2025-10-24[/B]
+- Initial release: Browse and stream RT documentary series
+		</news>
+	</extension>
+</addon>

@@ -1,0 +1,3 @@
+GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+
+[Standard GPLv2 License Text - See LICENSE.txt in parent directory for full text]
