@@ -321,10 +321,6 @@ jobs:
           sed -n '/<addon/,/<\/addon>/p' plugin.video.nextgenrttvseries/addon.xml | sed 's/^/\t/' >> addons.xml
           echo "" >> addons.xml
           
-          # Add repository addon
-          sed -n '/<addon/,/<\/addon>/p' repository.nextgenrt/addon.xml | sed 's/^/\t/' >> addons.xml
-          echo "" >> addons.xml
-          
           echo "</addons>" >> addons.xml
           
           # Generate MD5 (hash only, no filename)
