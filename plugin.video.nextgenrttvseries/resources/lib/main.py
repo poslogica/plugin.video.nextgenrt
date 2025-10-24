@@ -215,11 +215,25 @@ def list_series():
         xbmcplugin.endOfDirectory(HANDLE)
 
 def _extract_episodes_list(html):
-    """Extract episodes list from a series page.
+    """Extract episodes list from a series page with season info.
     
     Episodes are found with /episodes/ in the URL.
+    Returns episodes with extracted season and episode numbers.
     """
     episodes = []
+    
+    # First, try to extract season headers (e.g., "2 Season", "1 Season")
+    # Looking for patterns like "### [Episode X Title](url)" or similar markdown
+    season_pattern = r'(\d+)\s+Season'
+    season_matches = re.findall(season_pattern, html, re.IGNORECASE)
+    
+    xbmc.log("NextGen RT TV Series - Found season text: %s" % str(season_matches), xbmc.LOGINFO)
+    
+    # If we find seasons, use them; otherwise assume single season
+    seasons = sorted({int(s) for s in season_matches}, reverse=True) if season_matches else [1]
+    current_season = seasons[0] if seasons else 1
+    
+    xbmc.log("NextGen RT TV Series - Detected seasons: %s, starting with season %d" % (str(seasons), current_season), xbmc.LOGINFO)
     
     # Pattern that works: finds text followed by /episodes/ links
     # This pattern captures the episode title and the episode URL
@@ -228,25 +242,104 @@ def _extract_episodes_list(html):
     seen = set()
     matches = re.findall(pattern, html, re.IGNORECASE | re.DOTALL)
     
-    for match in matches:
-        if len(match) == 2:
-            title, url = match[0].strip(), match[1]
+    xbmc.log("NextGen RT TV Series - Found %d episode matches" % len(matches), xbmc.LOGINFO)
+    
+    # If we have multiple seasons, try to split episodes by season
+    # Episodes are typically grouped by season on the page
+    if len(seasons) > 1:
+        # Split the HTML by season sections
+        # Look for patterns that separate seasons (e.g., "### [Episode X" new section or season header)
+        
+        # Try to find episode groups separated by season headers or gaps
+        # Episodes with consecutive numbering likely belong to same season
+        temp_episodes = []
+        
+        for match in matches:
+            if len(match) == 2:
+                title, url = match[0].strip(), match[1]
+                
+                # Complete relative URLs
+                if url.startswith('/'):
+                    url = 'https://en.rtdoc.tv' + url
+                
+                if title and url not in seen and 'episodes' in url:
+                    seen.add(url)
+                    
+                    # Try to extract episode number
+                    ep_num = None
+                    ep_match = re.search(r'Episode\s+(\d+)', title, re.IGNORECASE)
+                    if ep_match:
+                        ep_num = int(ep_match.group(1))
+                    
+                    temp_episodes.append({
+                        'title': title,
+                        'url': url,
+                        'episode': ep_num,
+                        'season': None  # Will assign below
+                    })
+        
+        # Assign seasons based on episode numbers
+        # Assume episodes are divided into seasons - find episode number gaps
+        if temp_episodes and any(ep['episode'] is not None for ep in temp_episodes):
+            episode_numbers = sorted([ep['episode'] for ep in temp_episodes if ep['episode'] is not None])
             
-            # Complete relative URLs
-            if url.startswith('/'):
-                url = 'https://en.rtdoc.tv' + url
-            
-            if title and url not in seen and 'episodes' in url:
-                seen.add(url)
-                episodes.append({
-                    'title': title,
-                    'url': url
-                })
+            # Find the split point (largest gap in episode numbers)
+            if len(episode_numbers) >= 2:
+                max_gap = 0
+                gap_index = 0
+                for i in range(len(episode_numbers) - 1):
+                    gap = episode_numbers[i + 1] - episode_numbers[i]
+                    if gap > max_gap:
+                        max_gap = gap
+                        gap_index = i
+                
+                # Assign seasons: Season 2 has highest episode numbers
+                threshold = episode_numbers[gap_index] if max_gap > 1 else episode_numbers[len(episode_numbers) // 2]
+                
+                for ep in temp_episodes:
+                    if ep['episode'] and ep['episode'] > threshold:
+                        ep['season'] = 2
+                    else:
+                        ep['season'] = 1
+            else:
+                for ep in temp_episodes:
+                    ep['season'] = 1
+        else:
+            for ep in temp_episodes:
+                ep['season'] = 1
+        
+        episodes = temp_episodes
+    else:
+        # Single season - simpler processing
+        for match in matches:
+            if len(match) == 2:
+                title, url = match[0].strip(), match[1]
+                
+                # Complete relative URLs
+                if url.startswith('/'):
+                    url = 'https://en.rtdoc.tv' + url
+                
+                if title and url not in seen and 'episodes' in url:
+                    seen.add(url)
+                    
+                    # Try to extract episode number from title (e.g., "Episode 21 Title")
+                    episode_num = None
+                    
+                    ep_match = re.search(r'Episode\s+(\d+)', title, re.IGNORECASE)
+                    if ep_match:
+                        episode_num = int(ep_match.group(1))
+                    
+                    episodes.append({
+                        'title': title,
+                        'url': url,
+                        'episode': episode_num,
+                        'season': 1
+                    })
     
     return episodes
 
 def list_episodes(series_url):
-    """List episodes for a specific series."""
+    """List episodes for a specific series, organized by season."""
     try:
         xbmc.log("NextGen RT TV Series - Fetching episodes from %s" % series_url, xbmc.LOGINFO)
         html = _fetch_page_html(series_url)
@@ -257,23 +350,63 @@ def list_episodes(series_url):
             xbmcplugin.endOfDirectory(HANDLE)
             return
         
+        # Group episodes by season
+        episodes_by_season = {}
         for episode in episodes_list:
-            list_item = xbmcgui.ListItem(label=episode['title'])
-            list_item.setProperty("IsPlayable", "true")
-            
-            info_tag = list_item.getVideoInfoTag()
-            info_tag.setTitle(episode['title'])
-            try:
-                info_tag.setGenres(["Documentary"])
-            except AttributeError:
-                pass
-            
-            # Create a URL to play this episode
-            plugin_url = "%s?action=play&url=%s" % (PLUGIN_URL, episode['url'])
-            
-            xbmcplugin.addDirectoryItem(
-                handle=HANDLE, url=plugin_url, listitem=list_item, isFolder=False
-            )
+            season = episode.get('season', 1)
+            if season not in episodes_by_season:
+                episodes_by_season[season] = []
+            episodes_by_season[season].append(episode)
+        
+        # Display seasons as folders if multiple seasons, otherwise show episodes directly
+        seasons = sorted(episodes_by_season.keys(), reverse=True)
+        
+        if len(seasons) > 1:
+            # Multiple seasons - create season folders
+            for season in seasons:
+                season_episodes = episodes_by_season[season]
+                season_title = "Season %d (%d episodes)" % (season, len(season_episodes))
+                list_item = xbmcgui.ListItem(label=season_title)
+                list_item.setInfo("video", {"title": season_title})
+                
+                # Create a URL to list episodes for this season
+                # We'll pass the season number as a parameter
+                plugin_url = "%s?action=season_episodes&url=%s&season=%d" % (PLUGIN_URL, series_url, season)
+                
+                xbmcplugin.addDirectoryItem(
+                    handle=HANDLE, url=plugin_url, listitem=list_item, isFolder=True
+                )
+        else:
+            # Single season - show episodes directly
+            for episode in episodes_list:
+                ep_num = episode.get('episode')
+                ep_title = episode['title']
+                
+                # Format title with episode number if available
+                if ep_num:
+                    display_title = "S%dE%d - %s" % (episode.get('season', 1), ep_num, ep_title)
+                else:
+                    display_title = ep_title
+                
+                list_item = xbmcgui.ListItem(label=display_title)
+                list_item.setProperty("IsPlayable", "true")
+                
+                info_tag = list_item.getVideoInfoTag()
+                info_tag.setTitle(ep_title)
+                if ep_num:
+                    info_tag.setEpisode(ep_num)
+                    info_tag.setSeason(episode.get('season', 1))
+                try:
+                    info_tag.setGenres(["Documentary"])
+                except AttributeError:
+                    pass
+                
+                # Create a URL to play this episode
+                plugin_url = "%s?action=play&url=%s" % (PLUGIN_URL, episode['url'])
+                
+                xbmcplugin.addDirectoryItem(
+                    handle=HANDLE, url=plugin_url, listitem=list_item, isFolder=False
+                )
         
         xbmcplugin.endOfDirectory(HANDLE)
         
@@ -325,12 +458,68 @@ def run():
         url = params.get('url')
         if url:
             play_series(url)
+    elif action == 'season_episodes':
+        url = params.get('url')
+        season = params.get('season')
+        if url:
+            list_episodes_for_season(url, int(season) if season else 1)
     elif action == 'episodes':
         url = params.get('url')
         if url:
             list_episodes(url)
     else:
         list_series()
+
+def list_episodes_for_season(series_url, season_num):
+    """List episodes for a specific season of a series."""
+    try:
+        xbmc.log("NextGen RT TV Series - Fetching episodes for season %d from %s" % (season_num, series_url), xbmc.LOGINFO)
+        html = _fetch_page_html(series_url)
+        episodes_list = _extract_episodes_list(html)
+        
+        # Filter episodes for this season
+        season_episodes = [ep for ep in episodes_list if ep.get('season') == season_num]
+        
+        if not season_episodes:
+            xbmc.log("NextGen RT TV Series - No episodes found for season %d" % season_num, xbmc.LOGWARNING)
+            xbmcplugin.endOfDirectory(HANDLE)
+            return
+        
+        for episode in season_episodes:
+            ep_num = episode.get('episode')
+            ep_title = episode['title']
+            
+            # Format title with episode number if available
+            if ep_num:
+                display_title = "S%dE%d - %s" % (season_num, ep_num, ep_title)
+            else:
+                display_title = ep_title
+            
+            list_item = xbmcgui.ListItem(label=display_title)
+            list_item.setProperty("IsPlayable", "true")
+            
+            info_tag = list_item.getVideoInfoTag()
+            info_tag.setTitle(ep_title)
+            if ep_num:
+                info_tag.setEpisode(ep_num)
+                info_tag.setSeason(season_num)
+            try:
+                info_tag.setGenres(["Documentary"])
+            except AttributeError:
+                pass
+            
+            # Create a URL to play this episode
+            plugin_url = "%s?action=play&url=%s" % (PLUGIN_URL, episode['url'])
+            
+            xbmcplugin.addDirectoryItem(
+                handle=HANDLE, url=plugin_url, listitem=list_item, isFolder=False
+            )
+        
+        xbmcplugin.endOfDirectory(HANDLE)
+        
+    except Exception as e:
+        xbmc.log("NextGen RT TV Series - Error listing season episodes: %s" % str(e), xbmc.LOGERROR)
+        xbmcplugin.endOfDirectory(HANDLE)
 
 if __name__ == "__main__":
     run()
