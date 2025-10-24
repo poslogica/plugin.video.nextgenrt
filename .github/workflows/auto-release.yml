@@ -259,10 +259,11 @@ jobs:
 
             IDENTIFIER="nextgenrtkodirepository"
             
-            # Upload plugin zips from downloads
+            # Upload plugin zips from downloads to addon-specific subdirectories
             if [ -f "plugin-downloads/plugin.video.nextgenrt-"*.zip ]; then
-              echo "Uploading main plugin zip to Internet Archive"
+              echo "Uploading main plugin zip to Internet Archive (plugin.video.nextgenrt subdirectory)"
               ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/plugin.video.nextgenrt-*.zip \
+                --remote-name "plugin.video.nextgenrt/$(basename plugin-downloads/plugin.video.nextgenrt-*.zip)" \
                 --metadata="title:NextGen RT Kodi Repository" \
                 --metadata="mediatype:software" \
                 --metadata="collection:open_source_software" \
@@ -273,8 +274,9 @@ jobs:
             fi
             
             if [ -f "plugin-downloads/plugin.video.nextgenrttvseries-"*.zip ]; then
-              echo "Uploading TV series plugin zip to Internet Archive"
+              echo "Uploading TV series plugin zip to Internet Archive (plugin.video.nextgenrttvseries subdirectory)"
               ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/plugin.video.nextgenrttvseries-*.zip \
+                --remote-name "plugin.video.nextgenrttvseries/$(basename plugin-downloads/plugin.video.nextgenrttvseries-*.zip)" \
                 --metadata="title:NextGen RT Kodi Repository" \
                 --metadata="mediatype:software" \
                 --metadata="collection:open_source_software" \
@@ -287,12 +289,13 @@ jobs:
             # Delete old repository zip to clear cache
             echo "Deleting old repository zip from Internet Archive to clear cache"
             REPO_VERSION_NUMBER="${REPO_VERSION#v}"
-            ia -c "$CONFIG_FILE" delete "$IDENTIFIER" "repository.nextgenrt-${REPO_VERSION_NUMBER}.zip" || echo "File not found or deletion failed, continuing..."
+            ia -c "$CONFIG_FILE" delete "$IDENTIFIER" "repository.nextgenrt/repository.nextgenrt-${REPO_VERSION_NUMBER}.zip" || echo "File not found or deletion failed, continuing..."
             
             # Upload repository zip
             if [ -f "plugin-downloads/repository.nextgenrt-"*.zip ]; then
-              echo "Uploading repository zip to Internet Archive"
+              echo "Uploading repository zip to Internet Archive (repository.nextgenrt subdirectory)"
               ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/repository.nextgenrt-*.zip \
+                --remote-name "repository.nextgenrt/$(basename plugin-downloads/repository.nextgenrt-*.zip)" \
                 --metadata="title:NextGen RT Kodi Repository" \
                 --metadata="mediatype:software" \
                 --metadata="collection:open_source_software" \
