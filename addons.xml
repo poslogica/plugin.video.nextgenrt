@@ -17,10 +17,6 @@
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 			<website>https://www.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-			<assets>
-				<icon>plugin.video.nextgenrt/icon.png</icon>
-				<fanart>plugin.video.nextgenrt/fanart.jpg</fanart>
-			</assets>
 		</extension>
 	</addon>
 	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.0" provider-name="poslogica">
@@ -40,10 +36,6 @@
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 			<website>https://rtdoc.tv</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-			<assets>
-				<icon>plugin.video.nextgenrttvseries/icon.png</icon>
-				<fanart>plugin.video.nextgenrttvseries/fanart.jpg</fanart>
-			</assets>
 		</extension>
 	</addon>
 	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
@@ -60,8 +52,8 @@
 			<disclaimer lang="en"></disclaimer>
 			<platform>all</platform>
 			<assets>
-				<icon>repository.nextgenrt/icon.png</icon>
-				<fanart>repository.nextgenrt/fanart.jpg</fanart>
+				<icon>icon.png</icon>
+				<fanart>fanart.jpg</fanart>
 			</assets>
 		</extension>
 	</addon>
