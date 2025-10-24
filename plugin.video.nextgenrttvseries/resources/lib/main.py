@@ -351,24 +351,24 @@ def list_episodes(series_url):
                 )
         else:
             # Single season - show episodes directly
-            for episode in episodes_list:
+            for idx, episode in enumerate(episodes_list):
                 ep_num = episode.get('episode')
                 ep_title = episode['title']
+                season_num = episode.get('season', 1)
                 
-                # Format title with episode number if available
-                if ep_num:
-                    display_title = "S%dE%d - %s" % (episode.get('season', 1), ep_num, ep_title)
-                else:
-                    display_title = ep_title
+                # If ep_num is None, use sequential numbering
+                if ep_num is None:
+                    ep_num = idx + 1
+                
+                display_title = "S%dE%d - %s" % (season_num, ep_num, ep_title)
                 
                 list_item = xbmcgui.ListItem(label=display_title)
                 list_item.setProperty("IsPlayable", "true")
                 
                 info_tag = list_item.getVideoInfoTag()
                 info_tag.setTitle(ep_title)
-                if ep_num:
-                    info_tag.setEpisode(ep_num)
-                    info_tag.setSeason(episode.get('season', 1))
+                info_tag.setEpisode(ep_num)
+                info_tag.setSeason(season_num)
                 try:
                     info_tag.setGenres(["Documentary"])
                 except AttributeError:
@@ -463,19 +463,20 @@ def list_episodes_for_season(series_url, season_num):
             ep_title = episode['title']
             
             # Format title with episode number if available
-            if ep_num:
-                display_title = "S%dE%d - %s" % (season_num, ep_num, ep_title)
-            else:
-                display_title = ep_title
+            # If ep_num is None, use sequential numbering within the season
+            if ep_num is None:
+                # Number episodes sequentially within the season
+                ep_num = season_episodes.index(episode) + 1
+            
+            display_title = "S%dE%d - %s" % (season_num, ep_num, ep_title)
             
             list_item = xbmcgui.ListItem(label=display_title)
             list_item.setProperty("IsPlayable", "true")
             
             info_tag = list_item.getVideoInfoTag()
             info_tag.setTitle(ep_title)
-            if ep_num:
-                info_tag.setEpisode(ep_num)
-                info_tag.setSeason(season_num)
+            info_tag.setEpisode(ep_num)
+            info_tag.setSeason(season_num)
             try:
                 info_tag.setGenres(["Documentary"])
             except AttributeError:
