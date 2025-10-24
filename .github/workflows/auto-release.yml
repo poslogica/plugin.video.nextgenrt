@@ -219,12 +219,12 @@ jobs:
             } > "$CONFIG_FILE"
             chmod 600 "$CONFIG_FILE"
 
-            IDENTIFIER="nextgenrt-kodi-repo"
+            IDENTIFIER="nextgenrtkodirepository"
             echo "Uploading $FILE to Internet Archive as item: $IDENTIFIER"
             ia -c "$HOME/.config/ia.ini" upload "$IDENTIFIER" "$FILE" \
               --metadata="title:NextGen RT Kodi Repository" \
               --metadata="mediatype:software" \
-              --metadata="collection:opensource" \
+              --metadata="collection:open_source_software" \
               --metadata="creator:${{ github.repository_owner }}" \
               --metadata="subject:Kodi;Addon;Repository" \
               --no-derive \
