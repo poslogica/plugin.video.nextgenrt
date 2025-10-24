@@ -8,7 +8,7 @@ msgid "NextGen RT News"
 msgstr ""
 
 msgctxt "Addon Description"
-msgid "NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), and Arabic channels."
+msgid "NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), Arabic (ARAB), German (DE), French (FR), and Balkan (RS) channels."
 msgstr ""
 
 msgctxt "#32001"
@@ -41,6 +41,18 @@ msgstr ""
 
 msgctxt "#32014"
 msgid "RT News - ARAB"
+msgstr ""
+
+msgctxt "#32015"
+msgid "RT News - DE"
+msgstr ""
+
+msgctxt "#32016"
+msgid "RT News - FR"
+msgstr ""
+
+msgctxt "#32017"
+msgid "RT News - RS"
 msgstr ""
 
 msgctxt "#32100"

@@ -1,6 +1,7 @@
 import xbmcplugin
 import xbmcgui
 import xbmc
+import xbmcaddon
 import sys
 import re
 try:
@@ -15,16 +16,17 @@ except ImportError:
 PLUGIN_URL = sys.argv[0]
 HANDLE = int(sys.argv[1])
 
-# RT News streams with their titles - using original URLs
+# RT News streams and localization string IDs
+# String IDs must exist in resources/language/*/strings.po
 RT_STREAMS = [
-    ("https://www.rt.com/on-air/", "Global"),
-    ("https://www.rt.com/on-air/rt-america-air", "US"),
-    ("https://rtd.rt.com/on-air/", "Documentaries"),
-    ("https://actualidad.rt.com/en_vivo2", "ESP"),
-    ("https://arabic.rt.com/live/", "ARAB"),
-    ("https://de.rt.com/livetv/", "DE"),
-    ("https://francais.rt.com/en-direct/rt", "FR"),
-    ("https://rt.rs/livetv/", "RS")
+    ("https://www.rt.com/on-air/", 32010, "Global"),
+    ("https://www.rt.com/on-air/rt-america-air", 32011, "US"),
+    ("https://rtd.rt.com/on-air/", 32012, "Documentaries"),
+    ("https://actualidad.rt.com/en_vivo2", 32013, "ESP"),
+    ("https://arabic.rt.com/live/", 32014, "ARAB"),
+    ("https://de.rt.com/livetv/", 32015, "DE"),
+    ("https://francais.rt.com/en-direct/rt", 32016, "FR"),
+    ("https://rt.rs/livetv/", 32017, "RS"),
 ]
 
 def _fetch_page_html(page_url):
@@ -140,9 +142,11 @@ def get_stream_url(page_url):
 
 def list_videos():
     """Create a list of RT News streams."""
-    for url, name in RT_STREAMS:
-        list_item = xbmcgui.ListItem(label="RT News - %s" % name)
-        list_item.setInfo("video", {"title": "RT News - %s" % name, "genre": "News"})
+    addon = xbmcaddon.Addon()
+    for url, string_id, fallback in RT_STREAMS:
+        localized = addon.getLocalizedString(string_id) or "RT News - %s" % fallback
+        list_item = xbmcgui.ListItem(label=localized)
+        list_item.setInfo("video", {"title": localized, "genre": "News"})
         list_item.setProperty("IsPlayable", "true")
         
         # Create a URL with the page URL as a parameter
