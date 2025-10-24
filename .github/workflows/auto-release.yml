@@ -113,10 +113,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Create plugin zip
+      - name: Create plugin zips
         if: steps.check_release.outputs.exists == 'false'
         run: |
           zip -r plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip plugin.video.nextgenrt
+          zip -r plugin.video.nextgenrttvseries-1.0.0.zip plugin.video.nextgenrttvseries
       
       - name: Create Release with Tag
         if: steps.check_release.outputs.exists == 'false'
@@ -124,12 +125,14 @@ jobs:
         with:
           tag_name: ${{ steps.get_tag.outputs.NEW_VERSION }}
           name: NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
-          files: plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
+          files: |
+            plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
+            plugin.video.nextgenrttvseries-1.0.0.zip
           body: |
             ## NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
             
             ### Installation
-            1. Download the `plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip` file below
+            1. Download the plugin zip file below
             2. In Kodi, go to Settings → Add-ons → Install from zip file
             3. Select the downloaded zip file
             4. The plugin will automatically install InputStream Adaptive if needed
@@ -161,29 +164,47 @@ jobs:
           git fetch origin main
           git checkout origin/main -- plugin.video.nextgenrt/addon.xml repository.nextgenrt/addon.xml
       
-      - name: Wait for release asset
+      - name: Wait for release assets
         run: |
           VERSION="${{ needs.auto-tag.outputs.new_version }}"
           VERSION_NUMBER="${VERSION#v}"
-          echo "Waiting for release ${VERSION} asset to be available..."
+          echo "Waiting for release ${VERSION} assets to be available..."
           for i in {1..30}; do
             if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
-              echo "Release asset is available!"
+              echo "Main plugin asset is available!"
               break
             fi
             echo "Attempt $i: Asset not ready yet, waiting 10 seconds..."
             sleep 10
           done
-      
-      - name: Download latest release zip
+          
+          # Wait for TV series plugin asset
+          for i in {1..30}; do
+            if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-1.0.0.zip" 2>&1 | grep -q '200 OK'; then
+              echo "TV series plugin asset is available!"
+              break
+            fi
+            echo "Attempt $i: TV series asset not ready yet, waiting 10 seconds..."
+            sleep 10
+          done
+
+      - name: Download latest release zips
         run: |
           VERSION="${{ needs.auto-tag.outputs.new_version }}"
           VERSION_NUMBER="${VERSION#v}"
-          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" \
-            -O plugin.video.nextgenrt/plugin.video.nextgenrt-${VERSION_NUMBER}.zip
-          echo "Downloaded plugin version ${VERSION} as ${VERSION_NUMBER}"
+          mkdir -p plugin-downloads
           
-          # Ensure downloads folder exists and copy ONLY the repository zip for users
+          # Download main plugin
+          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" \
+            -O plugin-downloads/plugin.video.nextgenrt-${VERSION_NUMBER}.zip
+          echo "Downloaded main plugin version ${VERSION}"
+          
+          # Download TV series plugin
+          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-1.0.0.zip" \
+            -O plugin-downloads/plugin.video.nextgenrttvseries-1.0.0.zip
+          echo "Downloaded TV series plugin"
+          
+          # Ensure downloads folder exists and copy repository zip for users
           mkdir -p downloads
           if [ -f repository.nextgenrt/repository.nextgenrt-1.0.0.zip ]; then
             cp -f repository.nextgenrt/repository.nextgenrt-1.0.0.zip downloads/
@@ -197,15 +218,13 @@ jobs:
       - name: Install Internet Archive CLI
         run: pip install --upgrade internetarchive
 
-      - name: Upload repository zip to Internet Archive
+      - name: Upload plugin zips and assets to Internet Archive
         env:
           IA_ACCESS_KEY: ${{ secrets.IA_ACCESS_KEY }}
           IA_SECRET_KEY: ${{ secrets.IA_SECRET_KEY }}
         run: |
-          # Upload the Kodi repository zip (if present) to Internet Archive
-          FILE=$(ls downloads/repository.nextgenrt-*.zip 2>/dev/null | head -n1 || true)
-          if [ -n "$FILE" ] && [ -n "${IA_ACCESS_KEY:-}" ] && [ -n "${IA_SECRET_KEY:-}" ]; then
-            # Configure Internet Archive CLI with the provided credentials (expected sections/keys)
+          if [ -n "${IA_ACCESS_KEY:-}" ] && [ -n "${IA_SECRET_KEY:-}" ]; then
+            # Configure Internet Archive CLI with the provided credentials
             mkdir -p "$HOME/.config"
             SCREENNAME=${GITHUB_REPOSITORY_OWNER:-poslogica}
             CONFIG_FILE="$HOME/.config/ia.ini"
@@ -220,17 +239,72 @@ jobs:
             chmod 600 "$CONFIG_FILE"
 
             IDENTIFIER="nextgenrtkodirepository"
-            echo "Uploading $FILE to Internet Archive as item: $IDENTIFIER"
-            ia -c "$HOME/.config/ia.ini" upload "$IDENTIFIER" "$FILE" \
-              --metadata="title:NextGen RT Kodi Repository" \
-              --metadata="mediatype:software" \
-              --metadata="collection:open_source_software" \
-              --metadata="creator:${{ github.repository_owner }}" \
-              --metadata="subject:Kodi;Addon;Repository" \
-              --no-derive \
-              --retries 5
+            
+            # Upload main plugin with assets
+            if [ -d "plugin.video.nextgenrt" ]; then
+              echo "Uploading plugin.video.nextgenrt with assets to Internet Archive"
+              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin.video.nextgenrt/icon.png plugin.video.nextgenrt/fanart.jpg \
+                --metadata="title:NextGen RT Kodi Repository" \
+                --metadata="mediatype:software" \
+                --metadata="collection:open_source_software" \
+                --metadata="creator:${{ github.repository_owner }}" \
+                --metadata="subject:Kodi;Addon;Repository" \
+                --no-derive \
+                --retries 5
+            fi
+            
+            # Upload TV series plugin with assets
+            if [ -d "plugin.video.nextgenrttvseries" ]; then
+              echo "Uploading plugin.video.nextgenrttvseries with assets to Internet Archive"
+              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin.video.nextgenrttvseries/icon.png plugin.video.nextgenrttvseries/fanart.jpg \
+                --metadata="title:NextGen RT Kodi Repository" \
+                --metadata="mediatype:software" \
+                --metadata="collection:open_source_software" \
+                --metadata="creator:${{ github.repository_owner }}" \
+                --metadata="subject:Kodi;Addon;Repository" \
+                --no-derive \
+                --retries 5
+            fi
+            
+            # Upload plugin zips from downloads
+            if [ -f "plugin-downloads/plugin.video.nextgenrt-"*.zip ]; then
+              echo "Uploading main plugin zip to Internet Archive"
+              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/plugin.video.nextgenrt-*.zip \
+                --metadata="title:NextGen RT Kodi Repository" \
+                --metadata="mediatype:software" \
+                --metadata="collection:open_source_software" \
+                --metadata="creator:${{ github.repository_owner }}" \
+                --metadata="subject:Kodi;Addon;Repository" \
+                --no-derive \
+                --retries 5
+            fi
+            
+            if [ -f "plugin-downloads/plugin.video.nextgenrttvseries-1.0.0.zip" ]; then
+              echo "Uploading TV series plugin zip to Internet Archive"
+              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/plugin.video.nextgenrttvseries-1.0.0.zip \
+                --metadata="title:NextGen RT Kodi Repository" \
+                --metadata="mediatype:software" \
+                --metadata="collection:open_source_software" \
+                --metadata="creator:${{ github.repository_owner }}" \
+                --metadata="subject:Kodi;Addon;Repository" \
+                --no-derive \
+                --retries 5
+            fi
+            
+            # Upload repository zip
+            if [ -f "downloads/repository.nextgenrt-"*.zip ]; then
+              echo "Uploading repository zip to Internet Archive"
+              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" downloads/repository.nextgenrt-*.zip \
+                --metadata="title:NextGen RT Kodi Repository" \
+                --metadata="mediatype:software" \
+                --metadata="collection:open_source_software" \
+                --metadata="creator:${{ github.repository_owner }}" \
+                --metadata="subject:Kodi;Addon;Repository" \
+                --no-derive \
+                --retries 5
+            fi
           else
-            echo "Skipping Internet Archive upload (file or credentials missing)."
+            echo "Skipping Internet Archive upload (credentials missing)."
           fi
 
       - name: Generate static downloads index (for Kodi)
@@ -277,8 +351,11 @@ jobs:
           <addons>
           EOF
           
-          # Add plugin addon
+          # Add main plugin addon
           sed -n '/<addon/,/<\/addon>/p' plugin.video.nextgenrt/addon.xml | sed 's/^/\t/' >> addons.xml
+          
+          # Add TV series plugin addon
+          sed -n '/<addon/,/<\/addon>/p' plugin.video.nextgenrttvseries/addon.xml | sed 's/^/\t/' >> addons.xml
           
           # Add repository addon
           sed -n '/<addon/,/<\/addon>/p' repository.nextgenrt/addon.xml | sed 's/^/\t/' >> addons.xml
@@ -288,7 +365,7 @@ jobs:
           # Generate MD5
           md5sum addons.xml | cut -d' ' -f1 > addons.xml.md5
           
-          echo "Updated addons.xml and checksum"
+          echo "Updated addons.xml with both plugins and checksum"
 
       - name: Upload addons.xml and md5 to Internet Archive
         env:
