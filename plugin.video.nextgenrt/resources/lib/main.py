@@ -23,7 +23,7 @@ RT_STREAMS = [
     ("https://actualidad.rt.com/en_vivo2", "ESP"),
     ("https://arabic.rt.com/live/", "ARAB"),
     ("https://de.rt.com/livetv/", "DE"),
-    ("https://francais.rt.com/en-direct", "FR")
+    ("https://francais.rt.com/en-direct/rt", "FR")
 ]
 
 def _fetch_page_html(page_url):
