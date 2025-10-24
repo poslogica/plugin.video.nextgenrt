@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      REPO_VERSION: '1.0.0'  # Static version for repository.nextgenrt addon
     outputs:
       skip: ${{ steps.check_commit.outputs.skip }}
       new_version: ${{ steps.get_tag.outputs.NEW_VERSION }}
@@ -76,8 +78,11 @@ jobs:
           
           # Create news entry
           NEWS_ENTRY="[B]NextGen RT News ChangeLog $VERSION - $CURRENT_DATE[/B]\n$COMMIT_MESSAGES"
-          
-          # Update rt news plugin version to match
+
+          # Update RT repository version to static version 1.0.0
+          sed -i "s/\(<addon id=\"repository.nextgenrt\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1${REPO_VERSION}\"/" repository.nextgenrt/addon.xml
+
+          # Update RT news plugin version to match
           sed -i "s/\(<addon id=\"plugin.video.nextgenrt\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
           
           # Update TV series plugin version to match
@@ -88,7 +93,8 @@ jobs:
           perl -i -0pe "s|<news>.*?</news>|<news>$NEWS_ENTRY\n\t\t</news>|s" plugin.video.nextgenrt/addon.xml
           
           # Show the changes
-          echo "Updated addon.xml version to $VERSION_NUMBER"
+          echo "Updated repository.nextgenrt addon.xml version to ${REPO_VERSION}"
+          echo "Updated plugin.video.nextgenrt addon.xml version to $VERSION_NUMBER"
           echo "Updated plugin.video.nextgenrttvseries version to $VERSION_NUMBER"
           echo "Updated news section with latest changes"
       
@@ -98,7 +104,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add plugin.video.nextgenrt/addon.xml plugin.video.nextgenrttvseries/addon.xml
+          git add repository.nextgenrt/addon.xml plugin.video.nextgenrt/addon.xml plugin.video.nextgenrttvseries/addon.xml
           git commit -m "chore: bump version to ${{ steps.get_tag.outputs.NEW_VERSION }}" || echo "No changes to commit"
           git push || echo "No changes to push"
       
@@ -120,6 +126,7 @@ jobs:
         if: steps.check_release.outputs.exists == 'false'
         run: |
           VERSION="${{ steps.get_tag.outputs.NEW_VERSION }}"
+          zip -r repository.nextgenrt-${REPO_VERSION}.zip repository.nextgenrt
           zip -r plugin.video.nextgenrt-${VERSION}.zip plugin.video.nextgenrt
           zip -r plugin.video.nextgenrttvseries-${VERSION}.zip plugin.video.nextgenrttvseries
       
@@ -132,7 +139,7 @@ jobs:
           files: |
             plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
             plugin.video.nextgenrttvseries-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
-            repository.nextgenrt-1.0.0.zip
+            repository.nextgenrt-${{ env.REPO_VERSION }}.zip
           body: |
             ## NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
             
@@ -155,6 +162,8 @@ jobs:
     if: needs.auto-tag.outputs.skip == 'false'
     permissions:
       contents: write
+    env:
+      REPO_VERSION: '1.0.0'  # Static version for repository.nextgenrt addon
     
     steps:
       - name: Checkout main branch
@@ -164,12 +173,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Get repository addon
-        run: |
-          # Ensure we have the latest repository addon from main
-          git fetch origin main
-          git checkout origin/main -- repository.nextgenrt/
-      
       - name: Wait for release assets
         run: |
           VERSION="${{ needs.auto-tag.outputs.new_version }}"
@@ -177,7 +180,7 @@ jobs:
           echo "Waiting for release ${VERSION} assets to be available..."
           for i in {1..30}; do
             if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
-              echo "Main plugin asset is available!"
+              echo "RT news video plugin asset is available!"
               break
             fi
             echo "Attempt $i: Asset not ready yet, waiting 10 seconds..."
@@ -187,10 +190,20 @@ jobs:
           # Wait for TV series plugin asset
           for i in {1..30}; do
             if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
-              echo "TV series plugin asset is available!"
+              echo "RT TV series video plugin asset is available!"
               break
             fi
-            echo "Attempt $i: TV series asset not ready yet, waiting 10 seconds..."
+            echo "Attempt $i: RT TV series asset not ready yet, waiting 10 seconds..."
+            sleep 10
+          done
+          
+          # Wait for repository asset
+          for i in {1..30}; do
+            if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION}.zip" 2>&1 | grep -q '200 OK'; then
+              echo "RT Repository plugin asset is available!"
+              break
+            fi
+            echo "Attempt $i: RT Repository asset not ready yet, waiting 10 seconds..."
             sleep 10
           done
 
@@ -200,21 +213,20 @@ jobs:
           VERSION_NUMBER="${VERSION#v}"
           mkdir -p plugin-downloads
           
-          # Download main plugin
+          # Download RT news video plugin
           wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" \
             -O plugin-downloads/plugin.video.nextgenrt-${VERSION_NUMBER}.zip
-          echo "Downloaded main plugin version ${VERSION}"
+          echo "Downloaded RT news video plugin version ${VERSION}"
           
-          # Download TV series plugin
+          # Download TV series video plugin
           wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-${VERSION}.zip" \
             -O plugin-downloads/plugin.video.nextgenrttvseries-${VERSION_NUMBER}.zip
-          echo "Downloaded TV series plugin version ${VERSION}"
-          
-          # Create repository zip (fresh, not from release)
-          # This ensures the repository addon always has the latest addon.xml with current plugin versions
-          mkdir -p downloads
-          zip -r repository.nextgenrt-1.0.0.zip repository.nextgenrt
-          cp -f repository.nextgenrt-1.0.0.zip downloads/
+          echo "Downloaded TV series video plugin version ${VERSION}"
+
+          # Download RT repository plugin
+          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION}.zip" \
+            -O plugin-downloads/repository.nextgenrt-${REPO_VERSION}.zip
+          echo "Downloaded RT repository plugin version ${REPO_VERSION}"
 
       - name: Setup Python (for Internet Archive CLI)
         uses: actions/setup-python@v5
@@ -272,9 +284,9 @@ jobs:
             fi
             
             # Upload repository zip
-            if [ -f "downloads/repository.nextgenrt-"*.zip ]; then
+            if [ -f "plugin-downloads/repository.nextgenrt-"*.zip ]; then
               echo "Uploading repository zip to Internet Archive"
-              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" downloads/repository.nextgenrt-*.zip \
+              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/repository.nextgenrt-*.zip \
                 --metadata="title:NextGen RT Kodi Repository" \
                 --metadata="mediatype:software" \
                 --metadata="collection:open_source_software" \
@@ -286,46 +298,10 @@ jobs:
           else
             echo "Skipping Internet Archive upload (credentials missing)."
           fi
-
-      - name: Generate static downloads index (for Kodi)
-        run: |
-          # Kodi's file manager doesn't execute JavaScript, so generate a plain HTML listing
-          cat > downloads/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>Downloads - NextGen RT News</title>
-            <style>
-              body { font-family: Arial, sans-serif; padding: 24px; max-width: 900px; margin: 0 auto; }
-              h1 { color: #8BC63F; }
-              ul { line-height: 1.9; }
-              a { color: #0060df; text-decoration: none; }
-              a:hover { text-decoration: underline; }
-              .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-            </style>
-          </head>
-          <body>
-            <h1>Downloads</h1>
-            <p>Direct download files:</p>
-            <ul>
-          EOF
-          for f in downloads/*.zip; do
-            [ -e "$f" ] || continue
-            base=$(basename "$f")
-            echo "              <li><a class=\"mono\" href=\"$base\">$base</a></li>" >> downloads/index.html
-          done
-          cat >> downloads/index.html << 'EOF'
-            </ul>
-            <p class="mono">This index is generated automatically.</p>
-          </body>
-          </html>
-          EOF
       
-      - name: Update addons.xml
+      - name: Update addons.xml and generate checksum
         run: |
-          # Create addons.xml from addon.xml files
+          # Create root addons.xml from all the addon.xml files
           cat > addons.xml << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <addons>
@@ -347,7 +323,7 @@ jobs:
           
           echo "Updated addons.xml with both plugins and checksum"
 
-      - name: Commit root addons.xml to main
+      - name: Commit root addons.xml and addons.xml.md5 to main
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -391,3 +367,39 @@ jobs:
           else
             echo "Skipping IA upload for addons.xml (files or credentials missing)."
           fi
+
+      - name: Generate static downloads index (for Kodi)
+        run: |
+          # Kodi's file manager doesn't execute JavaScript, so generate a plain HTML listing
+          cat > downloads/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Downloads - NextGen RT News</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 24px; max-width: 900px; margin: 0 auto; }
+              h1 { color: #8BC63F; }
+              ul { line-height: 1.9; }
+              a { color: #0060df; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+              .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+            </style>
+          </head>
+          <body>
+            <h1>Downloads</h1>
+            <p>Direct download files:</p>
+            <ul>
+          EOF
+          for f in downloads/*.zip; do
+            [ -e "$f" ] || continue
+            base=$(basename "$f")
+            echo "              <li><a class=\"mono\" href=\"$base\">$base</a></li>" >> downloads/index.html
+          done
+          cat >> downloads/index.html << 'EOF'
+            </ul>
+            <p class="mono">This index is generated automatically.</p>
+          </body>
+          </html>
+          EOF
