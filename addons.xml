@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.37" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.38" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -17,11 +17,11 @@
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 			<website>https://www.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-			<news>[B]NextGen RT News ChangeLog v1.0.37 - 2025-10-24[/B]
-	- refactor: remove duplicate repository zip creation
+			<news>[B]NextGen RT News ChangeLog v1.0.38 - 2025-10-24[/B]
+	- fix: use explicit addon ID matching for all sed patterns
 			</news>
 		</extension>
-	</addon>	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.37" provider-name="poslogica">
+	</addon>	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.38" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
