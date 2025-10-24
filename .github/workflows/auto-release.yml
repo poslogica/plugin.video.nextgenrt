@@ -289,6 +289,40 @@ jobs:
           md5sum addons.xml | cut -d' ' -f1 > addons.xml.md5
           
           echo "Updated addons.xml and checksum"
+
+      - name: Upload addons.xml and md5 to Internet Archive
+        env:
+          IA_ACCESS_KEY: ${{ secrets.IA_ACCESS_KEY }}
+          IA_SECRET_KEY: ${{ secrets.IA_SECRET_KEY }}
+        run: |
+          # Upload repository index files to Internet Archive so a mirror stays updated
+          if [ -f addons.xml ] && [ -f addons.xml.md5 ] && [ -n "${IA_ACCESS_KEY:-}" ] && [ -n "${IA_SECRET_KEY:-}" ]; then
+            mkdir -p "$HOME/.config"
+            SCREENNAME=${GITHUB_REPOSITORY_OWNER:-poslogica}
+            CONFIG_FILE="$HOME/.config/ia.ini"
+            {
+              echo "[general]";
+              echo "screenname = ${SCREENNAME}";
+              echo;
+              echo "[s3]";
+              echo "access = ${IA_ACCESS_KEY}";
+              echo "secret = ${IA_SECRET_KEY}";
+            } > "$CONFIG_FILE"
+            chmod 600 "$CONFIG_FILE"
+
+            IDENTIFIER="nextgenrtkodirepository"
+            echo "Uploading addons.xml and addons.xml.md5 to Internet Archive item: $IDENTIFIER"
+            ia -c "$CONFIG_FILE" upload "$IDENTIFIER" addons.xml addons.xml.md5 \
+              --metadata="title:NextGen RT Kodi Repository" \
+              --metadata="mediatype:software" \
+              --metadata="collection:open_source_software" \
+              --metadata="creator:${{ github.repository_owner }}" \
+              --metadata="subject:Kodi;Addon;Repository" \
+              --no-derive \
+              --retries 5
+          else
+            echo "Skipping IA upload for addons.xml (files or credentials missing)."
+          fi
       
       - name: Commit and push to gh-pages
         run: |
