@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.54" provider-name="poslogica">
+<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.55" provider-name="poslogica">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1" />
 		<import addon="inputstream.adaptive" />
@@ -16,7 +16,7 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<website>https://www.rt.com</website>
 		<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-		<news>[B]NextGen RT News ChangeLog v1.0.54 - 2025-10-24[/B]
+		<news>[B]NextGen RT News ChangeLog v1.0.55 - 2025-10-24[/B]
 - fix: workflow
 		</news>
 	</extension>
