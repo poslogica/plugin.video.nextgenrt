@@ -9,12 +9,15 @@ The plugin automatically extracts stream URLs from RT's web pages and plays them
 
 ## Features
 
-- **5 Live RT News Channels**:
+- **8 Live RT News Channels**:
   - **Global** - Main RT News English channel
   - **US** - RT America
   - **Documentaries** - RT Documentary channel
   - **ESP** - RT Spanish (Actualidad RT)
   - **ARAB** - RT Arabic
+  - **DE** - RT Deutsch (German)
+  - **FR** - RT Français (French)
+  - **RS** - RT Balkan (Serbian)
 
 - **Automatic Stream Detection** - The plugin scrapes RT web pages to find and extract the actual m3u8 stream URLs
 - **HLS Streaming Support** - Uses inputstream.adaptive for reliable HLS stream playback
@@ -35,23 +38,23 @@ The plugin automatically extracts stream URLs from RT's web pages and plays them
 3. Select **Install from zip file**
 4. When prompted for a path, select **"None"** and enter:
 
-   ```text
-   https://raw.githubusercontent.com/poslogica/plugin.video.nextgenrt/gh-pages/repository.nextgenrt/repository.nextgenrt-1.0.0.zip
-   ```
+  ```text
+  https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt-1.0.0.zip
+  ```
 
-5. Wait for the repository installation notification
-6. Go back and select **Install from repository** → **NextGen RT Repository**
-7. Select **Video add-ons** → **NextGen RT News** → **Install**
-8. The plugin will automatically install **InputStream Adaptive** if needed
+1. Wait for the repository installation notification
+2. Go back and select **Install from repository** → **NextGen RT Repository**
+3. Select **Video add-ons** → **NextGen RT News** → **Install**
+4. The plugin will automatically install **InputStream Adaptive** if needed
 
 **Benefits**: Once the repository is installed, you'll automatically receive updates when new versions are released!
 
-**Repository Homepage**: [https://poslogica.github.io/plugin.video.nextgenrt/](https://poslogica.github.io/plugin.video.nextgenrt/)
+**Repository Homepage (IA mirror)**: [https://archive.org/download/nextgenrtkodirepository/](https://archive.org/download/nextgenrtkodirepository/)
 
 Direct repository zip (browse or download):
 
 ```text
-https://poslogica.github.io/plugin.video.nextgenrt/downloads/repository.nextgenrt-1.0.0.zip
+https://archive.org/download/nextgenrtkodirepository/repository.nextgenrt-1.0.0.zip
 ```
 
 ### Method 2: Install from ZIP file (One-time)
