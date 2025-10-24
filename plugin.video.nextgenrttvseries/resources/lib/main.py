@@ -244,16 +244,45 @@ def _extract_episodes_list(html):
     
     xbmc.log("NextGen RT TV Series - Found %d episode matches" % len(matches), xbmc.LOGINFO)
     
-    # If we have multiple seasons, try to split episodes by season
-    # Episodes are typically grouped by season on the page
-    if len(seasons) > 1:
-        # Split the HTML by season sections
-        # Look for patterns that separate seasons (e.g., "### [Episode X" new section or season header)
+    # For multi-season series, split episodes into seasons based on position
+    # Episodes appear in groups on the page separated by season info
+    # Since we detected len(seasons) seasons, divide episodes evenly
+    if len(seasons) > 1 and len(matches) > 0:
+        episodes_per_season = len(matches) // len(seasons)
+        xbmc.log("NextGen RT TV Series - Dividing %d episodes into %d seasons (~%d per season)" % (len(matches), len(seasons), episodes_per_season), xbmc.LOGINFO)
         
-        # Try to find episode groups separated by season headers or gaps
-        # Episodes with consecutive numbering likely belong to same season
-        temp_episodes = []
-        
+        # Assign episodes to seasons based on their position
+        season_idx = 0
+        for ep_idx, match in enumerate(matches):
+            if len(match) == 2:
+                title, url = match[0].strip(), match[1]
+                
+                # Complete relative URLs
+                if url.startswith('/'):
+                    url = 'https://en.rtdoc.tv' + url
+                
+                if title and url not in seen and 'episodes' in url:
+                    seen.add(url)
+                    
+                    # Determine which season based on position
+                    # Episodes appear in order on page, grouped by season
+                    # Start with highest season number, work down
+                    current_season = seasons[season_idx // episodes_per_season] if season_idx < len(seasons) else seasons[-1]
+                    
+                    # Try to extract episode number
+                    ep_match = re.search(r'Episode\s+(\d+)', title, re.IGNORECASE)
+                    ep_num = int(ep_match.group(1)) if ep_match else None
+                    
+                    episodes.append({
+                        'title': title,
+                        'url': url,
+                        'episode': ep_num,
+                        'season': current_season
+                    })
+                    
+                    season_idx += 1
+    else:
+        # Single season - simple processing
         for match in matches:
             if len(match) == 2:
                 title, url = match[0].strip(), match[1]
@@ -266,73 +295,13 @@ def _extract_episodes_list(html):
                     seen.add(url)
                     
                     # Try to extract episode number
-                    ep_num = None
                     ep_match = re.search(r'Episode\s+(\d+)', title, re.IGNORECASE)
-                    if ep_match:
-                        ep_num = int(ep_match.group(1))
-                    
-                    temp_episodes.append({
-                        'title': title,
-                        'url': url,
-                        'episode': ep_num,
-                        'season': None  # Will assign below
-                    })
-        
-        # Assign seasons based on episode numbers
-        # Assume episodes are divided into seasons - find episode number gaps
-        if temp_episodes and any(ep['episode'] is not None for ep in temp_episodes):
-            episode_numbers = sorted([ep['episode'] for ep in temp_episodes if ep['episode'] is not None])
-            
-            # Find the split point (largest gap in episode numbers)
-            if len(episode_numbers) >= 2:
-                max_gap = 0
-                gap_index = 0
-                for i in range(len(episode_numbers) - 1):
-                    gap = episode_numbers[i + 1] - episode_numbers[i]
-                    if gap > max_gap:
-                        max_gap = gap
-                        gap_index = i
-                
-                # Assign seasons: Season 2 has highest episode numbers
-                threshold = episode_numbers[gap_index] if max_gap > 1 else episode_numbers[len(episode_numbers) // 2]
-                
-                for ep in temp_episodes:
-                    if ep['episode'] and ep['episode'] > threshold:
-                        ep['season'] = 2
-                    else:
-                        ep['season'] = 1
-            else:
-                for ep in temp_episodes:
-                    ep['season'] = 1
-        else:
-            for ep in temp_episodes:
-                ep['season'] = 1
-        
-        episodes = temp_episodes
-    else:
-        # Single season - simpler processing
-        for match in matches:
-            if len(match) == 2:
-                title, url = match[0].strip(), match[1]
-                
-                # Complete relative URLs
-                if url.startswith('/'):
-                    url = 'https://en.rtdoc.tv' + url
-                
-                if title and url not in seen and 'episodes' in url:
-                    seen.add(url)
-                    
-                    # Try to extract episode number from title (e.g., "Episode 21 Title")
-                    episode_num = None
-                    
-                    ep_match = re.search(r'Episode\s+(\d+)', title, re.IGNORECASE)
-                    if ep_match:
-                        episode_num = int(ep_match.group(1))
+                    ep_num = int(ep_match.group(1)) if ep_match else None
                     
                     episodes.append({
                         'title': title,
                         'url': url,
-                        'episode': episode_num,
+                        'episode': ep_num,
                         'season': 1
                     })
     
