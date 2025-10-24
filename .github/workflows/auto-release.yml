@@ -8,13 +8,14 @@ on:
       #- '.github/**'
       - '.gitignore'
 
+env:
+  REPO_VERSION: 'v1.0.1'  # Single source of truth - available to all jobs
+
 jobs:
   auto-tag:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      REPO_VERSION: '1.0.1'  # Static version for repository.nextgenrt addon
     outputs:
       skip: ${{ steps.check_commit.outputs.skip }}
       new_version: ${{ steps.get_tag.outputs.NEW_VERSION }}
@@ -68,6 +69,7 @@ jobs:
           VERSION_NUMBER="${VERSION#v}"
           LATEST_TAG="${{ steps.get_tag.outputs.LATEST_TAG }}"
           CURRENT_DATE=$(date +%Y-%m-%d)
+          REPO_VERSION_NUMBER="${REPO_VERSION#v}"
           
           # Get commit messages since last tag
           if [ "$LATEST_TAG" != "v0.0.0" ]; then
@@ -80,7 +82,7 @@ jobs:
           NEWS_ENTRY="[B]NextGen RT News ChangeLog $VERSION - $CURRENT_DATE[/B]\n$COMMIT_MESSAGES"
 
           # Update RT repository version to static version
-          sed -i "s/\(<addon id=\"repository.nextgenrt\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1${REPO_VERSION}\"/" repository.nextgenrt/addon.xml
+          sed -i "s/\(<addon id=\"repository.nextgenrt\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1${REPO_VERSION_NUMBER}\"/" repository.nextgenrt/addon.xml
 
           # Update RT news plugin version to match
           sed -i "s/\(<addon id=\"plugin.video.nextgenrt\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
@@ -93,7 +95,7 @@ jobs:
           perl -i -0pe "s|<news>.*?</news>|<news>$NEWS_ENTRY\n\t\t</news>|s" plugin.video.nextgenrt/addon.xml
           
           # Show the changes
-          echo "Updated repository.nextgenrt addon.xml version to ${REPO_VERSION}"
+          echo "Updated repository.nextgenrt addon.xml version to ${REPO_VERSION_NUMBER}"
           echo "Updated plugin.video.nextgenrt addon.xml version to $VERSION_NUMBER"
           echo "Updated plugin.video.nextgenrttvseries version to $VERSION_NUMBER"
           echo "Updated news section with latest changes"
@@ -139,7 +141,7 @@ jobs:
           files: |
             plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
             plugin.video.nextgenrttvseries-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
-            repository.nextgenrt-v${{ env.REPO_VERSION }}.zip
+            repository.nextgenrt-${{ env.REPO_VERSION }}.zip
           body: |
             ## NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
             
@@ -162,8 +164,6 @@ jobs:
     if: needs.auto-tag.outputs.skip == 'false'
     permissions:
       contents: write
-    env:
-      REPO_VERSION: '1.0.0'  # Static version for repository.nextgenrt addon
     
     steps:
       - name: Checkout main branch
@@ -212,6 +212,7 @@ jobs:
         run: |
           VERSION="${{ needs.auto-tag.outputs.new_version }}"
           VERSION_NUMBER="${VERSION#v}"
+          REPO_VERSION_NUMBER="${REPO_VERSION#v}"
           mkdir -p plugin-downloads
           
           # Download RT news video plugin
@@ -225,7 +226,7 @@ jobs:
           echo "Downloaded TV series video plugin version ${VERSION}"
 
           # Download RT repository plugin
-          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION}.zip" \
+          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION_NUMBER}.zip" \
             -O plugin-downloads/repository.nextgenrt-${REPO_VERSION}.zip
           echo "Downloaded RT repository plugin version ${REPO_VERSION}"
 
@@ -286,7 +287,8 @@ jobs:
             
             # Delete old repository zip to clear cache
             echo "Deleting old repository zip from Internet Archive to clear cache"
-            ia -c "$CONFIG_FILE" delete "$IDENTIFIER" "repository.nextgenrt-${REPO_VERSION}.zip" || echo "File not found or deletion failed, continuing..."
+            REPO_VERSION_NUMBER="${REPO_VERSION#v}"
+            ia -c "$CONFIG_FILE" delete "$IDENTIFIER" "repository.nextgenrt-${REPO_VERSION_NUMBER}.zip" || echo "File not found or deletion failed, continuing..."
             
             # Upload repository zip
             if [ -f "plugin-downloads/repository.nextgenrt-"*.zip ]; then
