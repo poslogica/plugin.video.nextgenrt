@@ -209,7 +209,8 @@ jobs:
             -O plugin-downloads/plugin.video.nextgenrttvseries-${VERSION_NUMBER}.zip
           echo "Downloaded TV series plugin version ${VERSION}"
           
-          # Create repository zip and copy to downloads folder
+          # Create repository zip (fresh, not from release)
+          # This ensures the repository addon always has the latest addon.xml with current plugin versions
           mkdir -p downloads
           zip -r repository.nextgenrt-1.0.0.zip repository.nextgenrt
           cp -f repository.nextgenrt-1.0.0.zip downloads/
