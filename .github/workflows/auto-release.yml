@@ -245,32 +245,6 @@ jobs:
 
             IDENTIFIER="nextgenrtkodirepository"
             
-            # Upload main plugin with assets
-            if [ -d "plugin.video.nextgenrt" ]; then
-              echo "Uploading plugin.video.nextgenrt with assets to Internet Archive"
-              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin.video.nextgenrt/icon.png plugin.video.nextgenrt/fanart.jpg \
-                --metadata="title:NextGen RT Kodi Repository" \
-                --metadata="mediatype:software" \
-                --metadata="collection:open_source_software" \
-                --metadata="creator:${{ github.repository_owner }}" \
-                --metadata="subject:Kodi;Addon;Repository" \
-                --no-derive \
-                --retries 5
-            fi
-            
-            # Upload TV series plugin with assets
-            if [ -d "plugin.video.nextgenrttvseries" ]; then
-              echo "Uploading plugin.video.nextgenrttvseries with assets to Internet Archive"
-              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin.video.nextgenrttvseries/icon.png plugin.video.nextgenrttvseries/fanart.jpg \
-                --metadata="title:NextGen RT Kodi Repository" \
-                --metadata="mediatype:software" \
-                --metadata="collection:open_source_software" \
-                --metadata="creator:${{ github.repository_owner }}" \
-                --metadata="subject:Kodi;Addon;Repository" \
-                --no-derive \
-                --retries 5
-            fi
-            
             # Upload plugin zips from downloads
             if [ -f "plugin-downloads/plugin.video.nextgenrt-"*.zip ]; then
               echo "Uploading main plugin zip to Internet Archive"
