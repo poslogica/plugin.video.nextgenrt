@@ -2,9 +2,9 @@
 <addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
 	<extension point="xbmc.addon.repository" name="NextGen RT Repository">
 		<dir>
-			<info compressed="false">https://raw.githubusercontent.com/poslogica/plugin.video.nextgenrt/gh-pages/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/poslogica/plugin.video.nextgenrt/gh-pages/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/poslogica/plugin.video.nextgenrt/gh-pages/</datadir>
+			<info compressed="false">https://archive.org/download/nextgenrtkodirepository/addons.xml</info>
+			<checksum>https://archive.org/download/nextgenrtkodirepository/addons.xml.md5</checksum>
+			<datadir zip="true">https://archive.org/download/nextgenrtkodirepository/</datadir>
 		</dir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
