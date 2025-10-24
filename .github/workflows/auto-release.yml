@@ -123,7 +123,6 @@ jobs:
           VERSION="${{ steps.get_tag.outputs.NEW_VERSION }}"
           zip -r plugin.video.nextgenrt-${VERSION}.zip plugin.video.nextgenrt
           zip -r plugin.video.nextgenrttvseries-${VERSION}.zip plugin.video.nextgenrttvseries
-          zip -r repository.nextgenrt-1.0.0.zip repository.nextgenrt
       
       - name: Create Release with Tag
         if: steps.check_release.outputs.exists == 'false'
