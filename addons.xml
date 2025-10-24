@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.40" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.45" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -10,16 +10,18 @@
 		</extension>
 		<extension point="xbmc.addon.metadata">
 			<summary lang="en">NextGen RT News</summary>
-			<description lang="en">NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), German (DE), French (FR), and Russian (RS) channels. Automatic updates available via repository.</description>
+			<description lang="en">NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), and Arabic channels. Automatic updates available via repository.</description>
 			<disclaimer lang="en">Feel free to use this script.</disclaimer>
 			<platform>all</platform>
 			<language>en</language>
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 			<website>https://www.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
+			<news>[B]NextGen RT News ChangeLog v1.0.45 - 2025-10-24[/B]
+	- feat: automatically update root addons.xml in workflow
+			</news>
 		</extension>
-	</addon>
-	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.40" provider-name="poslogica">
+	</addon>	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.45" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -29,13 +31,16 @@
 		</extension>
 		<extension point="xbmc.addon.metadata">
 			<summary lang="en">NextGen RT TV Series</summary>
-			<description lang="en">Browse and stream RT TV series and documentaries. Discover multi-season series with organized episode listings from RTDoc.</description>
+			<description lang="en">NextGen RT TV Series Kodi Plugin. Browse and stream RT Documentary TV series directly in Kodi. Automatic updates available via repository.</description>
 			<disclaimer lang="en">Feel free to use this script.</disclaimer>
 			<platform>all</platform>
 			<language>en</language>
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-			<website>https://rtdoc.tv</website>
+			<website>https://rtd.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
+			<news>[B]NextGen RT TV Series ChangeLog v1.0.0 - 2025-10-24[/B]
+	- Initial release: Browse and stream RT documentary series
+			</news>
 		</extension>
 	</addon>
 	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
@@ -47,7 +52,7 @@
 			</dir>
 		</extension>
 		<extension point="xbmc.addon.metadata">
-			<summary lang="en">NextGen RT Repository</summary>
+			<summary lang="en">NextGen RT News Repository</summary>
 			<description lang="en">Repository for NextGen RT News addons. Install this to get automatic updates for RT News streaming plugins.</description>
 			<disclaimer lang="en"></disclaimer>
 			<platform>all</platform>
