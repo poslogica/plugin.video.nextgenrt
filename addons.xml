@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.28" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.29" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -21,8 +21,8 @@
 				<icon>icon.png</icon>
 				<fanart>fanart.jpg</fanart>
 			</assets>
-			<news>[B]NextGen RT News ChangeLog v1.0.28 - 2025-10-24[/B]
-	- fix: Address  Warning "inputstream.adaptive.manifest_type" property is deprecated and will be removed next Kodi version, the manifest type is now automatically detected.
+			<news>[B]NextGen RT News ChangeLog v1.0.29 - 2025-10-24[/B]
+	- fix: Address Setting most video properties through ListItem.setInfo() is deprecated and might be removed in future Kodi versions. Please use the respective setter in InfoTagVideo.
 			</news>
 		</extension>
 	</addon>	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
