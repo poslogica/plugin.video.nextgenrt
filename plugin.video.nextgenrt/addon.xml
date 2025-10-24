@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.44" provider-name="poslogica">
+<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.45" provider-name="poslogica">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1" />
 		<import addon="inputstream.adaptive" />
@@ -16,8 +16,8 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<website>https://www.rt.com</website>
 		<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-		<news>[B]NextGen RT News ChangeLog v1.0.44 - 2025-10-24[/B]
-- chore: update root addons.xml versions to v1.0.40
+		<news>[B]NextGen RT News ChangeLog v1.0.45 - 2025-10-24[/B]
+- feat: automatically update root addons.xml in workflow
 		</news>
 	</extension>
 </addon>
