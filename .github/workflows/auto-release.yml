@@ -157,15 +157,16 @@ jobs:
       contents: write
     
     steps:
-      - name: Checkout gh-pages
+      - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          ref: gh-pages
+          ref: main
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Checkout main branch addon files
+      - name: Get repository addon
         run: |
+          # Ensure we have the latest repository addon from main
           git fetch origin main
           git checkout origin/main -- repository.nextgenrt/
       
@@ -379,20 +380,3 @@ jobs:
           else
             echo "Skipping IA upload for addons.xml (files or credentials missing)."
           fi
-      
-      - name: Commit and push to gh-pages
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          # Clean up: remove plugin addon folders that shouldn't be on gh-pages
-          # gh-pages should only contain: addons.xml, addons.xml.md5, downloads/, and repository.nextgenrt/
-          rm -rf plugin.video.nextgenrt plugin.video.nextgenrttvseries
-          
-          # Only commit what we need on gh-pages
-          git add addons.xml addons.xml.md5 || true
-          # Remove old plugin folders from git if they exist
-          git rm -r --cached --ignore-unmatch plugin.video.nextgenrt plugin.video.nextgenrttvseries || true
-          
-          git commit -m "chore: update addons.xml with plugin ${{ needs.auto-tag.outputs.new_version }}" || echo "No changes"
-          git push || echo "No changes to push"
