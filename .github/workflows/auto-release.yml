@@ -79,7 +79,7 @@ jobs:
           
           # Update main plugin version
           # Match: <addon id="plugin.video.nextgenrt" ... version="X.X.X" ...>
-          sed -i "s/\(<addon [^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
+          sed -i "s/\(<addon id=\"plugin.video.nextgenrt\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
           
           # Update TV series plugin version to match
           sed -i "s/\(<addon id=\"plugin.video.nextgenrttvseries\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrttvseries/addon.xml
