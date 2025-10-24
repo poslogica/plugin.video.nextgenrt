@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.29" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.30" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -21,8 +21,17 @@
 				<icon>icon.png</icon>
 				<fanart>fanart.jpg</fanart>
 			</assets>
-			<news>[B]NextGen RT News ChangeLog v1.0.29 - 2025-10-24[/B]
-	- fix: Address Setting most video properties through ListItem.setInfo() is deprecated and might be removed in future Kodi versions. Please use the respective setter in InfoTagVideo.
+			<news>[B]NextGen RT News ChangeLog v1.0.30 - 2025-10-24[/B]
+	- Merge pull request #1 from poslogica/feature/tvseries
+	- feat: new rt tv series plugin
+	- refactor: Remove redundant icon/fanart uploads to IA (shipped in plugin zips)
+	- fix: Use same version for both plugins in workflow
+	- feat: Update GitHub Actions workflow to support both plugins (main + TV series) with Internet Archive upload
+	- feat: Add sequential episode numbering for display (S1E01 format)
+	- fix: Add logging to verify season extraction is working correctly
+	- feat: Improved season and episode detection with position-based season assignment
+	- feat: Add season detection and episode numbering (S1E01 format)
+	- feat: TV series plugin working - episodes now displaying and playing
 			</news>
 		</extension>
 	</addon>	<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
