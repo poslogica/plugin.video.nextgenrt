@@ -51,6 +51,10 @@
 			<description lang="en">Repository for NextGen RT News addons. Install this to get automatic updates for RT News streaming plugins.</description>
 			<disclaimer lang="en"></disclaimer>
 			<platform>all</platform>
+			<assets>
+				<icon>icon.png</icon>
+				<fanart>fanart.jpg</fanart>
+			</assets>
 		</extension>
 	</addon>
 </addons>
