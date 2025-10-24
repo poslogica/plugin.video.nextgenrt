@@ -77,9 +77,12 @@ jobs:
           # Create news entry
           NEWS_ENTRY="[B]NextGen RT News ChangeLog $VERSION - $CURRENT_DATE[/B]\n$COMMIT_MESSAGES"
           
-          # Update ONLY the addon version in addon.xml (not xbmc.python version)
+          # Update main plugin version
           # Match: <addon id="plugin.video.nextgenrt" ... version="X.X.X" ...>
           sed -i "s/\(<addon [^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrt/addon.xml
+          
+          # Update TV series plugin version to match
+          sed -i "s/\(<addon id=\"plugin.video.nextgenrttvseries\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrttvseries/addon.xml
           
           # Update news section in addon.xml (replace content between <news> tags)
           # Using perl for better multi-line handling
@@ -87,6 +90,7 @@ jobs:
           
           # Show the changes
           echo "Updated addon.xml version to $VERSION_NUMBER"
+          echo "Updated plugin.video.nextgenrttvseries version to $VERSION_NUMBER"
           echo "Updated news section with latest changes"
       
       - name: Commit version update
@@ -95,7 +99,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add plugin.video.nextgenrt/addon.xml
+          git add plugin.video.nextgenrt/addon.xml plugin.video.nextgenrttvseries/addon.xml
           git commit -m "chore: bump version to ${{ steps.get_tag.outputs.NEW_VERSION }}" || echo "No changes to commit"
           git push || echo "No changes to push"
       
@@ -116,8 +120,9 @@ jobs:
       - name: Create plugin zips
         if: steps.check_release.outputs.exists == 'false'
         run: |
-          zip -r plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip plugin.video.nextgenrt
-          zip -r plugin.video.nextgenrttvseries-1.0.0.zip plugin.video.nextgenrttvseries
+          VERSION="${{ steps.get_tag.outputs.NEW_VERSION }}"
+          zip -r plugin.video.nextgenrt-${VERSION}.zip plugin.video.nextgenrt
+          zip -r plugin.video.nextgenrttvseries-${VERSION}.zip plugin.video.nextgenrttvseries
       
       - name: Create Release with Tag
         if: steps.check_release.outputs.exists == 'false'
@@ -127,7 +132,7 @@ jobs:
           name: NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
           files: |
             plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
-            plugin.video.nextgenrttvseries-1.0.0.zip
+            plugin.video.nextgenrttvseries-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
           body: |
             ## NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
             
@@ -180,7 +185,7 @@ jobs:
           
           # Wait for TV series plugin asset
           for i in {1..30}; do
-            if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-1.0.0.zip" 2>&1 | grep -q '200 OK'; then
+            if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
               echo "TV series plugin asset is available!"
               break
             fi
@@ -200,9 +205,9 @@ jobs:
           echo "Downloaded main plugin version ${VERSION}"
           
           # Download TV series plugin
-          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-1.0.0.zip" \
-            -O plugin-downloads/plugin.video.nextgenrttvseries-1.0.0.zip
-          echo "Downloaded TV series plugin"
+          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-${VERSION}.zip" \
+            -O plugin-downloads/plugin.video.nextgenrttvseries-${VERSION_NUMBER}.zip
+          echo "Downloaded TV series plugin version ${VERSION}"
           
           # Ensure downloads folder exists and copy repository zip for users
           mkdir -p downloads
@@ -279,9 +284,9 @@ jobs:
                 --retries 5
             fi
             
-            if [ -f "plugin-downloads/plugin.video.nextgenrttvseries-1.0.0.zip" ]; then
+            if [ -f "plugin-downloads/plugin.video.nextgenrttvseries-"*.zip ]; then
               echo "Uploading TV series plugin zip to Internet Archive"
-              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/plugin.video.nextgenrttvseries-1.0.0.zip \
+              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/plugin.video.nextgenrttvseries-*.zip \
                 --metadata="title:NextGen RT Kodi Repository" \
                 --metadata="mediatype:software" \
                 --metadata="collection:open_source_software" \
