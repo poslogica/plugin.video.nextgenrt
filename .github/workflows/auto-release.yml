@@ -167,7 +167,7 @@ jobs:
       - name: Checkout main branch addon files
         run: |
           git fetch origin main
-          git checkout origin/main -- plugin.video.nextgenrt/addon.xml plugin.video.nextgenrttvseries/addon.xml repository.nextgenrt/addon.xml
+          git checkout origin/main -- plugin.video.nextgenrt/addon.xml plugin.video.nextgenrttvseries/addon.xml repository.nextgenrt/
       
       - name: Wait for release assets
         run: |
