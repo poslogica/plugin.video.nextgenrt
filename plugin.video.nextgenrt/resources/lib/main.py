@@ -6,11 +6,10 @@ import sys
 import re
 try:
     from urllib.request import urlopen, Request
-    from urllib.parse import parse_qs, urlencode
+    from urllib.parse import parse_qs
 except ImportError:
     from urllib2 import urlopen, Request
     from urlparse import parse_qs
-    from urllib import urlencode
 
 # Plugin constants
 PLUGIN_URL = sys.argv[0]
@@ -146,7 +145,13 @@ def list_videos():
     for url, string_id, fallback in RT_STREAMS:
         localized = addon.getLocalizedString(string_id) or "RT News - %s" % fallback
         list_item = xbmcgui.ListItem(label=localized)
-        list_item.setInfo("video", {"title": localized, "genre": "News"})
+        info_tag = list_item.getVideoInfoTag()
+        info_tag.setTitle(localized)
+        # Use InfoTagVideo instead of deprecated setInfo()
+        try:
+            info_tag.setGenres(["News"])
+        except AttributeError:
+            pass
         list_item.setProperty("IsPlayable", "true")
         
         # Create a URL with the page URL as a parameter
