@@ -205,6 +205,15 @@ jobs:
           # Upload the Kodi repository zip (if present) to Internet Archive
           FILE=$(ls downloads/repository.nextgenrt-*.zip 2>/dev/null | head -n1 || true)
           if [ -n "$FILE" ] && [ -n "${IA_ACCESS_KEY:-}" ] && [ -n "${IA_SECRET_KEY:-}" ]; then
+            # Configure Internet Archive CLI with the provided credentials
+            mkdir -p "$HOME/.config"
+            cat > "$HOME/.config/ia.ini" << EOF
+            [general]
+            access_key = ${IA_ACCESS_KEY}
+            secret_key = ${IA_SECRET_KEY}
+            EOF
+            chmod 600 "$HOME/.config/ia.ini"
+
             IDENTIFIER="nextgenrt-kodi-repo"
             echo "Uploading $FILE to Internet Archive as item: $IDENTIFIER"
             ia upload "$IDENTIFIER" "$FILE" \
