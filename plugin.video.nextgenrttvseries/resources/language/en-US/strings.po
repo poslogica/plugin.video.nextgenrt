@@ -1,0 +1,28 @@
+# Kodi Media Center language file
+# Addon Name: NextGen RT TV Series
+# Addon id: plugin.video.nextgenrttvseries
+# Addon Provider: poslogica
+
+msgctxt "Addon Summary"
+msgid "NextGen RT TV Series"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "NextGen RT TV Series Kodi Plugin. Browse and stream RT Documentary TV series directly in Kodi."
+msgstr ""
+
+msgctxt "#32010"
+msgid "RT Documentary Live"
+msgstr ""
+
+msgctxt "#32100"
+msgid "No stream URL found"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Error fetching stream"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Failed to resolve stream URL"
+msgstr ""

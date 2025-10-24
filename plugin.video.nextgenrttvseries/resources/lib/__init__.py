@@ -1,0 +1,1 @@
+# Kodi Addon Library Initialization
