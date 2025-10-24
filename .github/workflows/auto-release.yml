@@ -14,7 +14,7 @@ jobs:
     permissions:
       contents: write
     env:
-      REPO_VERSION: '1.0.0'  # Static version for repository.nextgenrt addon
+      REPO_VERSION: '1.0.1'  # Static version for repository.nextgenrt addon
     outputs:
       skip: ${{ steps.check_commit.outputs.skip }}
       new_version: ${{ steps.get_tag.outputs.NEW_VERSION }}
@@ -79,7 +79,7 @@ jobs:
           # Create news entry
           NEWS_ENTRY="[B]NextGen RT News ChangeLog $VERSION - $CURRENT_DATE[/B]\n$COMMIT_MESSAGES"
 
-          # Update RT repository version to static version 1.0.0
+          # Update RT repository version to static version
           sed -i "s/\(<addon id=\"repository.nextgenrt\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1${REPO_VERSION}\"/" repository.nextgenrt/addon.xml
 
           # Update RT news plugin version to match
@@ -313,12 +313,15 @@ jobs:
           
           # Add main plugin addon
           sed -n '/<addon/,/<\/addon>/p' plugin.video.nextgenrt/addon.xml | sed 's/^/\t/' >> addons.xml
+          echo "" >> addons.xml
           
           # Add TV series plugin addon
           sed -n '/<addon/,/<\/addon>/p' plugin.video.nextgenrttvseries/addon.xml | sed 's/^/\t/' >> addons.xml
+          echo "" >> addons.xml
           
           # Add repository addon
           sed -n '/<addon/,/<\/addon>/p' repository.nextgenrt/addon.xml | sed 's/^/\t/' >> addons.xml
+          echo "" >> addons.xml
           
           echo "</addons>" >> addons.xml
           
