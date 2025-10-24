@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.0" provider-name="poslogica">
+<addon id="repository.nextgenrt" name="NextGen RT Repository" version="1.0.1" provider-name="poslogica">
 	<extension point="xbmc.addon.repository" name="NextGen RT Repository">
 		<dir>
 			<info compressed="false">https://archive.org/download/nextgenrtkodirepository/addons.xml</info>
