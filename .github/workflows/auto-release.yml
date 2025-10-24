@@ -139,7 +139,7 @@ jobs:
           files: |
             plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
             plugin.video.nextgenrttvseries-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
-            repository.nextgenrt-${{ env.REPO_VERSION }}.zip
+            repository.nextgenrt-v${{ env.REPO_VERSION }}.zip
           body: |
             ## NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
             
@@ -177,6 +177,7 @@ jobs:
         run: |
           VERSION="${{ needs.auto-tag.outputs.new_version }}"
           VERSION_NUMBER="${VERSION#v}"
+          REPO_VERSION_NUMBER="${REPO_VERSION#v}"
           echo "Waiting for release ${VERSION} assets to be available..."
           for i in {1..30}; do
             if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrt-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
@@ -199,7 +200,7 @@ jobs:
           
           # Wait for repository asset
           for i in {1..30}; do
-            if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION}.zip" 2>&1 | grep -q '200 OK'; then
+            if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION_NUMBER}.zip" 2>&1 | grep -q '200 OK'; then
               echo "RT Repository plugin asset is available!"
               break
             fi
