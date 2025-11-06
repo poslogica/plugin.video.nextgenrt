@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.60" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.61" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -17,14 +17,18 @@
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 			<website>https://www.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
-			<news>[B]NextGen RT News ChangeLog v1.0.60 - 2025-10-24[/B]
-	- fix: add disclaimer
-	- update .gitignore
+			<assets>
+				<icon>icon.png</icon>
+				<fanart>fanart.jpg</fanart>
+			</assets>
+			<news>[B]NextGen RT News ChangeLog v1.0.61 - 2025-11-06[/B]
+	- Merge pull request #3 from poslogica/feature/icons
+	- feat: add icon and fanart assets to plugins
 	- chore: update root addons.xml and checksum with current plugin versions
 			</news>
 		</extension>
 	</addon>
-	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.60" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.61" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -43,6 +47,10 @@
 			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 			<website>https://rtd.rt.com</website>
 			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
+			<assets>
+				<icon>icon.png</icon>
+				<fanart>fanart.jpg</fanart>
+			</assets>
 			<news>[B]NextGen RT TV Series ChangeLog v1.0.0 - 2025-10-24[/B]
 	- Initial release: Browse and stream RT documentary series
 			</news>
