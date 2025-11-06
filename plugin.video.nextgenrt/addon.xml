@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.60" provider-name="poslogica">
+<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.61" provider-name="poslogica">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1" />
 		<import addon="inputstream.adaptive" />
@@ -20,9 +20,9 @@
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>[B]NextGen RT News ChangeLog v1.0.60 - 2025-10-24[/B]
-- fix: add disclaimer
-- update .gitignore
+		<news>[B]NextGen RT News ChangeLog v1.0.61 - 2025-11-06[/B]
+- Merge pull request #3 from poslogica/feature/icons
+- feat: add icon and fanart assets to plugins
 - chore: update root addons.xml and checksum with current plugin versions
 		</news>
 	</extension>
