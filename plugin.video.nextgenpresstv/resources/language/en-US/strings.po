@@ -1,0 +1,68 @@
+# Kodi Media Center language file
+# Addon Name: NextGen PressTV Documentaries
+# Addon id: plugin.video.nextgenpresstv
+# Addon Provider: poslogica
+
+msgctxt "Addon Summary"
+msgid "NextGen PressTV Documentaries"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "NextGen PressTV Documentaries Kodi Plugin. Streams PressTV documentary content directly in Kodi."
+msgstr ""
+
+msgctxt "#32001"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Enable Subtitles"
+msgstr ""
+
+msgctxt "#32003"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#32010"
+msgid "PressTV - Iran"
+msgstr ""
+
+msgctxt "#32011"
+msgid "PressTV - Imperialism"
+msgstr ""
+
+msgctxt "#32012"
+msgid "PressTV - Resistance"
+msgstr ""
+
+msgctxt "#32013"
+msgid "PressTV - Biography"
+msgstr ""
+
+msgctxt "#32014"
+msgid "PressTV - Religion"
+msgstr ""
+
+msgctxt "#32015"
+msgid "PressTV - West Asia"
+msgstr ""
+
+msgctxt "#32016"
+msgid "PressTV - World"
+msgstr ""
+
+msgctxt "#32017"
+msgid "PressTV - Live Stream"
+msgstr ""
+
+msgctxt "#32100"
+msgid "No stream URL found"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Error fetching stream"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Failed to resolve stream URL"
+msgstr ""

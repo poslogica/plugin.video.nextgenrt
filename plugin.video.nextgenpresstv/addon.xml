@@ -1,6 +1,5 @@
-
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.62" provider-name="poslogica">
+<addon id="plugin.video.nextgenpresstv" name="NextGen PressTV Documentaries" version="1.0.62" provider-name="poslogica">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1" />
 		<import addon="inputstream.adaptive" />
@@ -9,21 +8,20 @@
 		<provides>video</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">NextGen RT News</summary>
-		<description lang="en">NextGen RT News Kodi Plugin. Streams RT News content directly in Kodi including Global, US, Documentaries, Spanish (ESP), and Arabic channels. Automatic updates available via repository.</description>
+		<summary lang="en">NextGen PressTV Documentaries</summary>
+		<description lang="en">NextGen PressTV Documentaries Kodi Plugin. Streams PressTV documentary content directly in Kodi. Automatic updates available via repository.</description>
 		<disclaimer lang="en">Feel free to use this script.</disclaimer>
 		<platform>all</platform>
 		<language>en</language>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<website>https://www.rt.com</website>
+		<website>https://www.presstv.ir/doc</website>
 		<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
 		<assets>
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>[B]NextGen RT News ChangeLog v1.0.62 - 2025-11-06[/B]
-- update icons
-- chore: update root addons.xml and checksum with current plugin versions
+		<news>[B]NextGen PressTV Documentaries ChangeLog v1.0.0 - 2026-02-26[/B]
+- Initial release: PressTV Documentaries plugin
 		</news>
 	</extension>
 </addon>
