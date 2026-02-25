@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.63" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrt" name="NextGen RT News" version="1.0.64" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -21,14 +21,15 @@
 				<icon>icon.png</icon>
 				<fanart>fanart.jpg</fanart>
 			</assets>
-			<news>[B]NextGen RT News ChangeLog v1.0.63 - 2026-02-25[/B]
-	- Merge pull request #4 from poslogica/feat/dependency_fix
-	- Add new plugin presstv that supports playing video from www.presstv.ir
+			<news>[B]NextGen RT News ChangeLog v1.0.64 - 2026-02-25[/B]
+	- Merge pull request #5 from poslogica/feat/dependency_fix
+	- Merge branch 'main' into feat/dependency_fix
+	- update github action to include new plugin
 	- chore: update root addons.xml and checksum with current plugin versions
 			</news>
 		</extension>
 	</addon>
-	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.63" provider-name="poslogica">
+	<addon id="plugin.video.nextgenrttvseries" name="NextGen RT TV Series" version="1.0.64" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -56,7 +57,8 @@
 			</news>
 		</extension>
 	</addon>
-	<addon id="plugin.video.nextgenpresstv" name="NextGen PressTV Documentaries" version="1.0.0" provider-name="poslogica">
+
+	<addon id="plugin.video.nextgenpresstv" name="NextGen PressTV Documentaries" version="1.0.64" provider-name="poslogica">
 		<requires>
 			<import addon="xbmc.python" version="3.0.1" />
 			<import addon="inputstream.adaptive" />
@@ -78,7 +80,7 @@
 				<fanart>fanart.jpg</fanart>
 			</assets>
 			<news>[B]NextGen PressTV Documentaries ChangeLog v1.0.0 - 2026-02-26[/B]
-	- Initial release: PressTV Documentaries plugin with 7 categories
+	- Initial release: PressTV Documentaries plugin
 			</news>
 		</extension>
 	</addon>
