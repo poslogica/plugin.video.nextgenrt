@@ -56,5 +56,31 @@
 			</news>
 		</extension>
 	</addon>
+	<addon id="plugin.video.nextgenpresstv" name="NextGen PressTV Documentaries" version="1.0.0" provider-name="poslogica">
+		<requires>
+			<import addon="xbmc.python" version="3.0.1" />
+			<import addon="inputstream.adaptive" />
+		</requires>
+		<extension point="xbmc.python.pluginsource" library="default.py">
+			<provides>video</provides>
+		</extension>
+		<extension point="xbmc.addon.metadata">
+			<summary lang="en">NextGen PressTV Documentaries</summary>
+			<description lang="en">NextGen PressTV Documentaries Kodi Plugin. Streams PressTV ir documentary content directly in Kodi. Automatic updates available via repository.</description>
+			<disclaimer lang="en">Feel free to use this script.</disclaimer>
+			<platform>all</platform>
+			<language>en</language>
+			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+			<website>https://www.presstv.ir/doc</website>
+			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
+			<assets>
+				<icon>icon.png</icon>
+				<fanart>fanart.jpg</fanart>
+			</assets>
+			<news>[B]NextGen PressTV Documentaries ChangeLog v1.0.0 - 2026-02-26[/B]
+	- Initial release: PressTV Documentaries plugin with 7 categories
+			</news>
+		</extension>
+	</addon>
 
 </addons>
