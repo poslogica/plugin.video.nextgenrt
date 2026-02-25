@@ -65,7 +65,7 @@
 		</extension>
 		<extension point="xbmc.addon.metadata">
 			<summary lang="en">NextGen PressTV Documentaries</summary>
-			<description lang="en">NextGen PressTV Documentaries Kodi Plugin. Streams PressTV documentary content directly in Kodi. Automatic updates available via repository.</description>
+			<description lang="en">NextGen PressTV Documentaries Kodi Plugin. Streams PressTV ir documentary content directly in Kodi. Automatic updates available via repository.</description>
 			<disclaimer lang="en">Feel free to use this script.</disclaimer>
 			<platform>all</platform>
 			<language>en</language>

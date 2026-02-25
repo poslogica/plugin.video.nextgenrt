@@ -90,6 +90,9 @@ jobs:
           # Update TV series plugin version to match
           sed -i "s/\(<addon id=\"plugin.video.nextgenrttvseries\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenrttvseries/addon.xml
           
+          # Update PressTV Documentaries plugin version to match
+          sed -i "s/\(<addon id=\"plugin.video.nextgenpresstv\"[^>]*version=\"\)[0-9]*\.[0-9]*\.[0-9]*\"/\1$VERSION_NUMBER\"/" plugin.video.nextgenpresstv/addon.xml
+          
           # Update news section in addon.xml (replace content between <news> tags)
           # Using perl for better multi-line handling
           perl -i -0pe "s|<news>.*?</news>|<news>$NEWS_ENTRY\n\t\t</news>|s" plugin.video.nextgenrt/addon.xml
@@ -98,6 +101,7 @@ jobs:
           echo "Updated repository.nextgenrt addon.xml version to ${REPO_VERSION_NUMBER}"
           echo "Updated plugin.video.nextgenrt addon.xml version to $VERSION_NUMBER"
           echo "Updated plugin.video.nextgenrttvseries version to $VERSION_NUMBER"
+          echo "Updated plugin.video.nextgenpresstv addon.xml version to $VERSION_NUMBER"
           echo "Updated news section with latest changes"
       
       - name: Commit version update
@@ -106,7 +110,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add repository.nextgenrt/addon.xml plugin.video.nextgenrt/addon.xml plugin.video.nextgenrttvseries/addon.xml
+          git add repository.nextgenrt/addon.xml plugin.video.nextgenrt/addon.xml plugin.video.nextgenrttvseries/addon.xml plugin.video.nextgenpresstv/addon.xml
           git commit -m "chore: bump version to ${{ steps.get_tag.outputs.NEW_VERSION }}" || echo "No changes to commit"
           git push || echo "No changes to push"
       
@@ -131,6 +135,7 @@ jobs:
           zip -r repository.nextgenrt-${REPO_VERSION}.zip repository.nextgenrt
           zip -r plugin.video.nextgenrt-${VERSION}.zip plugin.video.nextgenrt
           zip -r plugin.video.nextgenrttvseries-${VERSION}.zip plugin.video.nextgenrttvseries
+          zip -r plugin.video.nextgenpresstv-${VERSION}.zip plugin.video.nextgenpresstv
       
       - name: Create Release with Tag
         if: steps.check_release.outputs.exists == 'false'
@@ -141,6 +146,7 @@ jobs:
           files: |
             plugin.video.nextgenrt-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
             plugin.video.nextgenrttvseries-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
+            plugin.video.nextgenpresstv-${{ steps.get_tag.outputs.NEW_VERSION }}.zip
             repository.nextgenrt-${{ env.REPO_VERSION }}.zip
           body: |
             ## NextGen RT News ${{ steps.get_tag.outputs.NEW_VERSION }}
@@ -197,6 +203,16 @@ jobs:
             sleep 10
           done
           
+          # Wait for PressTV Documentaries plugin asset
+          for i in {1..30}; do
+            if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenpresstv-${VERSION}.zip" 2>&1 | grep -q '200 OK'; then
+              echo "PressTV Documentaries plugin asset is available!"
+              break
+            fi
+            echo "Attempt $i: PressTV Documentaries asset not ready yet, waiting 10 seconds..."
+            sleep 10
+          done
+          
           # Wait for repository asset
           for i in {1..30}; do
             if wget --spider "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION}.zip" 2>&1 | grep -q '200 OK'; then
@@ -223,6 +239,11 @@ jobs:
           wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenrttvseries-${VERSION}.zip" \
             -O plugin-downloads/plugin.video.nextgenrttvseries-${VERSION_NUMBER}.zip
           echo "Downloaded TV series video plugin version ${VERSION}"
+          
+          # Download PressTV Documentaries plugin
+          wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/plugin.video.nextgenpresstv-${VERSION}.zip" \
+            -O plugin-downloads/plugin.video.nextgenpresstv-${VERSION_NUMBER}.zip
+          echo "Downloaded PressTV Documentaries plugin version ${VERSION}"
 
           # Download RT repository plugin
           wget "https://github.com/poslogica/plugin.video.nextgenrt/releases/download/${VERSION}/repository.nextgenrt-${REPO_VERSION}.zip" \
@@ -286,6 +307,19 @@ jobs:
                 --retries 5
             fi
             
+            if [ -f "plugin-downloads/plugin.video.nextgenpresstv-"*.zip ]; then
+              echo "Uploading PressTV Documentaries plugin zip to Internet Archive (plugin.video.nextgenpresstv subdirectory)"
+              ia -c "$CONFIG_FILE" upload "$IDENTIFIER" plugin-downloads/plugin.video.nextgenpresstv-*.zip \
+                --remote-name "plugin.video.nextgenpresstv/$(basename plugin-downloads/plugin.video.nextgenpresstv-*.zip)" \
+                --metadata="title:NextGen RT Kodi Repository" \
+                --metadata="mediatype:software" \
+                --metadata="collection:open_source_software" \
+                --metadata="creator:${{ github.repository_owner }}" \
+                --metadata="subject:Kodi;Addon;Repository" \
+                --no-derive \
+                --retries 5
+            fi
+            
             # Delete old repository zip to clear cache
             echo "Deleting old repository zip from Internet Archive to clear cache"
             REPO_VERSION_NUMBER="${REPO_VERSION#v}"
@@ -322,6 +356,10 @@ jobs:
           
           # Add TV series plugin addon
           sed -n '/<addon/,/<\/addon>/p' plugin.video.nextgenrttvseries/addon.xml | sed 's/^/\t/' >> addons.xml
+          echo "" >> addons.xml
+          
+          # Add PressTV Documentaries plugin addon
+          sed -n '/<addon/,/<\/addon>/p' plugin.video.nextgenpresstv/addon.xml | sed 's/^/\t/' >> addons.xml
           echo "" >> addons.xml
           
           echo "</addons>" >> addons.xml
