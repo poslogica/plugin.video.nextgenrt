@@ -85,4 +85,33 @@
 		</extension>
 	</addon>
 
+	<addon id="plugin.video.nextgenrtfilms" name="NextGen RT Films" version="1.0.64" provider-name="poslogica">
+		<requires>
+			<import addon="xbmc.python" version="3.0.1" />
+			<import addon="inputstream.adaptive" />
+		</requires>
+		<extension point="xbmc.python.pluginsource" library="default.py">
+			<provides>video</provides>
+		</extension>
+		<extension point="xbmc.addon.metadata">
+			<summary lang="en">NextGen RT Films</summary>
+			<description lang="en">NextGen RT Films Kodi Plugin. Browse and stream RT Documentary films directly in Kodi. Watch free documentary films on war, history, nature and more. Automatic updates available via repository.</description>
+			<disclaimer lang="en">This plugin is not affiliated with or endorsed by RT (Russia Today).
+	It simply provides a convenient way to access publicly available RT content within Kodi.
+	Users are responsible for ensuring their use complies with RT's terms of service and local regulations.</disclaimer>
+			<platform>all</platform>
+			<language>en</language>
+			<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+			<website>https://rtd.rt.com/films/</website>
+			<source>https://github.com/poslogica/plugin.video.nextgenrt</source>
+			<assets>
+				<icon>icon.png</icon>
+				<fanart>fanart.jpg</fanart>
+			</assets>
+			<news>[B]NextGen RT Films ChangeLog v1.0.0 - 2026-05-24[/B]
+	- Initial release: Browse and stream RT documentary films
+			</news>
+		</extension>
+	</addon>
+
 </addons>

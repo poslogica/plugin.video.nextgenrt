@@ -1,0 +1,36 @@
+# Kodi Media Center language file
+# Addon Name: NextGen RT Films
+# Addon id: plugin.video.nextgenrtfilms
+# Addon Provider: poslogica
+
+msgctxt "Addon Summary"
+msgid "NextGen RT Films"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "NextGen RT Films Kodi Plugin. Browse and stream RT Documentary films directly in Kodi. Watch free documentary films on war, history, nature and more."
+msgstr ""
+
+msgctxt "#32001"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Enable Subtitles"
+msgstr ""
+
+msgctxt "#32003"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#32100"
+msgid "No films found"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Error fetching films"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Failed to resolve stream URL"
+msgstr ""
